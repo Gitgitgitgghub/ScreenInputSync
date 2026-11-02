@@ -70,6 +70,7 @@ final class EventTapController: @unchecked Sendable {
         if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
             _ = router.route(.tapDisabled, screenSharingIsFrontmost: false)
             if let eventTap { CGEvent.tapEnable(tap: eventTap, enable: true) }
+            onDecision(.dismissHUD)
             onDecision(.reenableTap)
             return Unmanaged.passUnretained(event)
         }
@@ -87,24 +88,35 @@ final class EventTapController: @unchecked Sendable {
     }
 
     private func keyboardEvent(type: CGEventType, event: CGEvent) -> KeyboardEvent? {
-        let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+        KeyboardEventAdapter.map(
+            type: type,
+            keyCode: event.getIntegerValueField(.keyboardEventKeycode),
+            flags: event.flags
+        )
+    }
+}
 
+enum KeyboardEventAdapter {
+    static func map(
+        type: CGEventType,
+        keyCode: Int64,
+        flags: CGEventFlags
+    ) -> KeyboardEvent? {
         if type == .flagsChanged {
             switch keyCode {
             case 54, 55:
-                return event.flags.contains(.maskCommand) ? .commandDown : .commandUp
+                return flags.contains(.maskCommand) ? .commandDown : .commandUp
             case 56, 60:
-                return event.flags.contains(.maskShift) ? .shiftDown : .shiftUp
+                return flags.contains(.maskShift) ? .shiftDown : .shiftUp
             case 57:
-                return event.flags.contains(.maskAlphaShift) ? .capsLockDown : .capsLockUp
+                // Caps Lock emits one flagsChanged event per physical press.
+                // maskAlphaShift is the new latch state, not a key-down edge.
+                return .capsLockPressed
             default:
                 return nil
             }
         }
 
-        if keyCode == 57 {
-            return type == .keyDown ? .capsLockDown : .capsLockUp
-        }
         guard type == .keyDown else { return nil }
         switch keyCode {
         case 14: return .englishKeyDown

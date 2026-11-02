@@ -8,6 +8,7 @@ final class MenuBarController: NSObject {
     private let loginMenuItem: NSMenuItem
     var onResync: (() -> Void)?
     var onLaunchAtLoginChanged: ((Bool) -> Void)?
+    var onMenuWillOpen: (() -> Void)?
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -41,6 +42,7 @@ final class MenuBarController: NSObject {
             action: #selector(quit),
             keyEquivalent: "q"
         ).target = self
+        menu.delegate = self
         statusItem.menu = menu
     }
 
@@ -68,5 +70,11 @@ final class MenuBarController: NSObject {
 
     @objc private func quit() {
         NSApplication.shared.terminate(nil)
+    }
+}
+
+extension MenuBarController: NSMenuDelegate {
+    func menuWillOpen(_ menu: NSMenu) {
+        onMenuWillOpen?()
     }
 }

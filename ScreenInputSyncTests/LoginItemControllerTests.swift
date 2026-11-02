@@ -32,6 +32,20 @@ final class LoginItemControllerTests: XCTestCase {
 
         XCTAssertEqual(reportedErrors.count, 1)
     }
+
+    func testExplicitOptOutPersistsAcrossManualRelaunch() {
+        let preferences = LoginPreferenceSpy()
+        let firstService = LoginServiceSpy(status: .enabled)
+        let firstController = LoginItemController(service: firstService, preferences: preferences)
+        firstController.setEnabled(false)
+
+        let relaunchedService = LoginServiceSpy(status: .notRegistered)
+        let relaunchedController = LoginItemController(service: relaunchedService, preferences: preferences)
+        relaunchedController.enableIfNeeded()
+
+        XCTAssertEqual(relaunchedService.registerCount, 0)
+        XCTAssertEqual(preferences.userChoice, false)
+    }
 }
 
 private enum LoginTestError: Error { case denied }
@@ -56,4 +70,8 @@ private final class LoginServiceSpy: LoginItemServicing {
         unregisterCount += 1
         status = .notRegistered
     }
+}
+
+private final class LoginPreferenceSpy: LoginItemPreferenceStoring {
+    var userChoice: Bool?
 }

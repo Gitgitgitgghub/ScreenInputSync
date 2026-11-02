@@ -4,14 +4,14 @@ import XCTest
 final class KeyboardActionRouterTests: XCTestCase {
     func testEventsPassThroughOutsideScreenSharing() {
         var router = KeyboardActionRouter()
-        XCTAssertEqual(router.route(.capsLockDown, screenSharingIsFrontmost: false), .passThrough)
+        XCTAssertEqual(router.route(.capsLockPressed, screenSharingIsFrontmost: false), .passThrough)
         XCTAssertEqual(router.route(.commandDown, screenSharingIsFrontmost: false), .passThrough)
     }
 
-    func testCapsLockIsSuppressedAndTogglesInsideScreenSharing() {
+    func testEveryCapsLockLatchChangeIsSuppressedAndTogglesInsideScreenSharing() {
         var router = KeyboardActionRouter()
-        XCTAssertEqual(router.route(.capsLockDown, screenSharingIsFrontmost: true), .toggleBoth)
-        XCTAssertEqual(router.route(.capsLockUp, screenSharingIsFrontmost: true), .suppress)
+        XCTAssertEqual(router.route(.capsLockPressed, screenSharingIsFrontmost: true), .toggleBoth)
+        XCTAssertEqual(router.route(.capsLockPressed, screenSharingIsFrontmost: true), .toggleBoth)
     }
 
     func testOrderedGestureShowsHUDOnlyAfterBothModifiersRelease() {
@@ -20,6 +20,7 @@ final class KeyboardActionRouterTests: XCTestCase {
         XCTAssertEqual(router.route(.shiftDown, screenSharingIsFrontmost: true), .passThrough)
         XCTAssertEqual(router.route(.commandUp, screenSharingIsFrontmost: true), .passThrough)
         XCTAssertEqual(router.route(.shiftUp, screenSharingIsFrontmost: true), .showResyncHUD)
+        XCTAssertFalse(RoutingDecision.showResyncHUD.suppressesEvent)
     }
 
     func testCommandShiftLetterCancelsAndPassesThrough() {
@@ -57,5 +58,15 @@ final class KeyboardActionRouterTests: XCTestCase {
         XCTAssertEqual(router.route(.tapDisabled, screenSharingIsFrontmost: true), .reenableTap)
         XCTAssertEqual(router.route(.commandUp, screenSharingIsFrontmost: true), .passThrough)
         XCTAssertEqual(router.route(.shiftUp, screenSharingIsFrontmost: true), .passThrough)
+    }
+
+    func testFocusLossDismissesActiveHUDWithoutSuppressingEvent() {
+        var router = KeyboardActionRouter()
+        router.setHUDActive(true)
+
+        let decision = router.route(.otherKeyDown, screenSharingIsFrontmost: false)
+
+        XCTAssertEqual(decision, .dismissHUDPassingThrough)
+        XCTAssertFalse(decision.suppressesEvent)
     }
 }

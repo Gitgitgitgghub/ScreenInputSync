@@ -24,6 +24,8 @@ ScreenInputSync 是僅安裝在發起連線 Mac 上的 macOS 選單列工具。�
 
 工具會自動註冊為登入項目，也可從選單列關閉或重新開啟「Launch at Login」。
 
+安裝腳本會優先使用 Keychain 中的 Apple Development 憑證，讓重建後的權限識別保持穩定。若找不到憑證才使用 ad-hoc 簽署；ad-hoc 版本更新後，macOS 可能要求重新核准權限。
+
 ## 使用方式
 
 - **Screen Sharing 位於前景：** Caps Lock 明確切換本機 ABC／注音，並送出 F17 切換遠端。
@@ -39,17 +41,17 @@ ScreenInputSync 是僅安裝在發起連線 Mac 上的 macOS 選單列工具。�
 
 在完成下列實機測試前，**不要移除 Karabiner**：
 
-1. 暫時停用現有的「Screen Sharing: Caps Lock to F18」規則，避免重複事件。
-2. 確認其他 App 的 Caps Lock 正常。
-3. 在 Screen Sharing 中測試 Caps Lock 往返 ABC／注音。
-4. 測試 ABC 下的半形大寫 `ABC` 與注音中文組字。
-5. 測試 `Command + Shift + P` 不開啟 HUD。
-6. 測試 Command → Shift HUD 的 E、C、Esc。
-7. 睡眠、重新連線後再次確認 Caps Lock 同步。
+1. 先備份：`cp ~/.config/karabiner/karabiner.json ~/.config/karabiner/karabiner.json.before-screen-input-sync`。
+2. 暫時停用現有的「Screen Sharing: Caps Lock to F18」規則，避免重複事件。
+3. 確認其他 App 的 Caps Lock 正常。
+4. 在 Screen Sharing 中測試 Caps Lock 往返 ABC／注音。
+5. 測試 ABC 下的半形大寫 `ABC` 與注音中文組字。
+6. 測試 `Command + Shift + P` 不開啟 HUD。
+7. 測試 Command → Shift HUD 的 E、C、Esc。
+8. 睡眠、重新連線後再次確認 Caps Lock 同步。
 
 全部通過後才能：
 
-- 備份 `~/.config/karabiner/karabiner.json`。
 - 移除 Karabiner 的 Screen Sharing Caps Lock 規則。
 - 移除本機 F18 輸入來源快捷鍵。
 - **保留遠端 F17 輸入來源快捷鍵。**

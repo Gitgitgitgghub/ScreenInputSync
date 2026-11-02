@@ -3,8 +3,7 @@ enum KeyboardEvent: Equatable, Sendable {
     case commandUp
     case shiftDown
     case shiftUp
-    case capsLockDown
-    case capsLockUp
+    case capsLockPressed
     case englishKeyDown
     case chineseKeyDown
     case escapeKeyDown
@@ -20,10 +19,16 @@ enum RoutingDecision: Equatable, Sendable {
     case chooseEnglish
     case chooseChinese
     case dismissHUD
+    case dismissHUDPassingThrough
     case reenableTap
 
     var suppressesEvent: Bool {
-        self != .passThrough && self != .reenableTap
+        switch self {
+        case .passThrough, .reenableTap, .showResyncHUD, .dismissHUDPassingThrough:
+            return false
+        default:
+            return true
+        }
     }
 }
 
@@ -47,9 +52,10 @@ struct KeyboardActionRouter {
         }
 
         guard screenSharingIsFrontmost else {
+            let shouldDismissHUD = hudIsActive
             _ = recognizer.handle(.reset)
             hudIsActive = false
-            return .passThrough
+            return shouldDismissHUD ? .dismissHUDPassingThrough : .passThrough
         }
 
         if hudIsActive {
@@ -69,10 +75,8 @@ struct KeyboardActionRouter {
         }
 
         switch event {
-        case .capsLockDown:
+        case .capsLockPressed:
             return .toggleBoth
-        case .capsLockUp:
-            return .suppress
         case .commandDown:
             return decision(for: recognizer.handle(.commandDown))
         case .commandUp:

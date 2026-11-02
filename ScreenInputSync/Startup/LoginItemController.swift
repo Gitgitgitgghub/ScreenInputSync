@@ -13,6 +13,30 @@ protocol LoginItemServicing: AnyObject {
     func unregister() throws
 }
 
+protocol LoginItemPreferenceStoring: AnyObject {
+    var userChoice: Bool? { get set }
+}
+
+final class UserDefaultsLoginItemPreferences: LoginItemPreferenceStoring {
+    private let defaults: UserDefaults
+    private let key = "launchAtLoginUserChoice"
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
+
+    var userChoice: Bool? {
+        get {
+            guard defaults.object(forKey: key) != nil else { return nil }
+            return defaults.bool(forKey: key)
+        }
+        set {
+            if let newValue { defaults.set(newValue, forKey: key) }
+            else { defaults.removeObject(forKey: key) }
+        }
+    }
+}
+
 final class MainAppLoginItemService: LoginItemServicing {
     private let service = SMAppService.mainApp
 
@@ -37,13 +61,16 @@ final class MainAppLoginItemService: LoginItemServicing {
 
 final class LoginItemController {
     private let service: LoginItemServicing
+    private let preferences: LoginItemPreferenceStoring
     private let onError: (Error) -> Void
 
     init(
         service: LoginItemServicing = MainAppLoginItemService(),
+        preferences: LoginItemPreferenceStoring = UserDefaultsLoginItemPreferences(),
         onError: @escaping (Error) -> Void = { _ in }
     ) {
         self.service = service
+        self.preferences = preferences
         self.onError = onError
     }
 
@@ -51,11 +78,13 @@ final class LoginItemController {
     var isEnabled: Bool { service.status == .enabled }
 
     func enableIfNeeded() {
-        guard service.status == .notRegistered else { return }
+        guard preferences.userChoice != false,
+              service.status == .notRegistered else { return }
         setEnabled(true)
     }
 
     func setEnabled(_ enabled: Bool) {
+        preferences.userChoice = enabled
         do {
             if enabled {
                 guard service.status != .enabled else { return }

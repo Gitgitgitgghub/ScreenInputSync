@@ -24,10 +24,19 @@ final class InputSyncCoordinatorTests: XCTestCase {
         let remote = RemoteSpy()
         let coordinator = InputSyncCoordinator(sourceController: source, remoteEmitter: remote)
 
-        coordinator.alignLocal(to: .english)
+        let succeeded = coordinator.alignLocal(to: .english)
 
+        XCTAssertTrue(succeeded)
         XCTAssertEqual(source.selectedModes, [.english])
         XCTAssertEqual(remote.emissionCount, 0)
+    }
+
+    func testFailedAlignmentReturnsFalse() {
+        let source = SourceSpy(mode: .english)
+        source.error = TestError.sourceUnavailable
+        let coordinator = InputSyncCoordinator(sourceController: source, remoteEmitter: RemoteSpy())
+
+        XCTAssertFalse(coordinator.alignLocal(to: .chinese))
     }
 
     func testSourceErrorIsReportedAndRemoteIsNotToggled() {

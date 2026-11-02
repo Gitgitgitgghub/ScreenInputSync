@@ -27,12 +27,15 @@ final class InputSyncCoordinator {
         }
     }
 
-    func alignLocal(to mode: InputMode) {
+    @discardableResult
+    func alignLocal(to mode: InputMode) -> Bool {
         do {
             try sourceController.select(mode)
             onModeChanged(mode)
+            return true
         } catch {
             onError(error)
+            return false
         }
     }
 }

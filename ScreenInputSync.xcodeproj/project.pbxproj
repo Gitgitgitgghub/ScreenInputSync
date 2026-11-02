@@ -12,6 +12,7 @@
 		2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */; };
 		30BD95FF3B44700D9B546A9B /* InputMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CBF3BC4B41462BD7DA965 /* InputMode.swift */; };
 		31B56E1D2189E1ACF400318F /* FrontmostApplicationChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB007A5937504DDB1DC8BFD /* FrontmostApplicationChecking.swift */; };
+		407BF042536E13B4AB10986D /* KeyboardEventAdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83E6695C516527F6042313A /* KeyboardEventAdapterTests.swift */; };
 		4AA98FE0DA33FDDA98D01170 /* LoginItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C110423E11AD401D1BE506A2 /* LoginItemController.swift */; };
 		64C2C61C2ACE3FD1B8BEF07E /* KeyboardActionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40400F97DC5F608EFE485D6F /* KeyboardActionRouter.swift */; };
 		6A3E1DB5F23859AD2B930733 /* InputSyncCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F535EF732AC517FCC92891B1 /* InputSyncCoordinatorTests.swift */; };
@@ -54,6 +55,7 @@
 		87B868DFA7E92E838A2892D0 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierSequenceRecognizer.swift; sourceTree = "<group>"; };
 		B79470BE720CDF351D75398A /* ScreenInputSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenInputSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B83E6695C516527F6042313A /* KeyboardEventAdapterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardEventAdapterTests.swift; sourceTree = "<group>"; };
 		C110423E11AD401D1BE506A2 /* LoginItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemController.swift; sourceTree = "<group>"; };
 		C78CBF3BC4B41462BD7DA965 /* InputMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMode.swift; sourceTree = "<group>"; };
 		CC5E9E31571A94232F01B6C0 /* ScreenInputSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenInputSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +123,7 @@
 				2AB18EC5136BC7671EAD79B2 /* CarbonInputSourceMatchingTests.swift */,
 				F535EF732AC517FCC92891B1 /* InputSyncCoordinatorTests.swift */,
 				18E9F1E2052473790EB38396 /* KeyboardActionRouterTests.swift */,
+				B83E6695C516527F6042313A /* KeyboardEventAdapterTests.swift */,
 				25CE24274F3FE1186D09B282 /* LoginItemControllerTests.swift */,
 				E49A3F8A3B88B237DFDA79C3 /* ModifierSequenceRecognizerTests.swift */,
 				6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */,
@@ -268,6 +271,7 @@
 				83E45A79B3914F440B4804D1 /* CarbonInputSourceMatchingTests.swift in Sources */,
 				6A3E1DB5F23859AD2B930733 /* InputSyncCoordinatorTests.swift in Sources */,
 				F6FEBC5DE72FBB1E3F59C01D /* KeyboardActionRouterTests.swift in Sources */,
+				407BF042536E13B4AB10986D /* KeyboardEventAdapterTests.swift in Sources */,
 				B23DF5F375C8C5DFB9F5F847 /* LoginItemControllerTests.swift in Sources */,
 				AC93D0EB06BB0493F5D7AB55 /* ModifierSequenceRecognizerTests.swift in Sources */,
 				2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */,

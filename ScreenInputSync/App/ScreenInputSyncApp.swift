@@ -24,14 +24,15 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
     private var eventTapController: EventTapController?
     private var hudController: ResyncHUDController?
     private var loginItemController: LoginItemController?
+    private var workspaceObserver: NSObjectProtocol?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let menu = MenuBarController()
-        menuBarController = menu
-
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else {
             return
         }
+
+        let menu = MenuBarController()
+        menuBarController = menu
 
         let hud = ResyncHUDController()
         hudController = hud
@@ -57,21 +58,48 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         loginItemController = loginController
         loginController.enableIfNeeded()
         menu.setLaunchAtLogin(loginController.isEnabled)
+        if loginController.status == .requiresApproval {
+            menu.updateStatus("Approve ScreenInputSync in System Settings → Login Items")
+        }
 
+        let frontmostChecker = WorkspaceFrontmostApplicationChecker()
         let eventTap = EventTapController(
-            frontmostChecker: WorkspaceFrontmostApplicationChecker()
+            frontmostChecker: frontmostChecker
         ) { [weak self] decision in
             DispatchQueue.main.async { self?.handle(decision) }
         }
         eventTapController = eventTap
 
         menu.onResync = { [weak eventTap, weak hud] in
+            guard frontmostChecker.screenSharingIsFrontmost else {
+                menu.updateStatus("Resync is available only while Screen Sharing is frontmost")
+                return
+            }
             eventTap?.setHUDActive(true)
             hud?.show()
         }
         menu.onLaunchAtLoginChanged = { [weak loginController, weak menu] enabled in
             loginController?.setEnabled(enabled)
             menu?.setLaunchAtLogin(loginController?.isEnabled == true)
+        }
+        menu.onMenuWillOpen = { [weak menu] in
+            do {
+                menu?.updateMode(try sourceController.currentMode())
+            } catch {
+                menu?.updateStatus("Error: \(error.localizedDescription)")
+            }
+        }
+
+        workspaceObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard !frontmostChecker.screenSharingIsFrontmost else { return }
+                self?.eventTapController?.setHUDActive(false)
+                self?.hudController?.dismiss()
+            }
         }
 
         do {
@@ -95,12 +123,18 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         case .showResyncHUD:
             hudController?.show()
         case .chooseEnglish:
-            inputSyncCoordinator?.alignLocal(to: .english)
-            hudController?.showConfirmation(.english)
+            if inputSyncCoordinator?.alignLocal(to: .english) == true {
+                hudController?.showConfirmation(.english)
+            } else {
+                hudController?.dismiss()
+            }
         case .chooseChinese:
-            inputSyncCoordinator?.alignLocal(to: .chinese)
-            hudController?.showConfirmation(.chinese)
-        case .dismissHUD:
+            if inputSyncCoordinator?.alignLocal(to: .chinese) == true {
+                hudController?.showConfirmation(.chinese)
+            } else {
+                hudController?.dismiss()
+            }
+        case .dismissHUD, .dismissHUDPassingThrough:
             hudController?.dismiss()
         case .reenableTap:
             menuBarController?.updateStatus("Keyboard monitor recovered")
