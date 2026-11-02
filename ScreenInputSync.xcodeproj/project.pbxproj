@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */; };
+		AC93D0EB06BB0493F5D7AB55 /* ModifierSequenceRecognizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49A3F8A3B88B237DFDA79C3 /* ModifierSequenceRecognizerTests.swift */; };
 		BBC3977776A9A34A31F14F03 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B868DFA7E92E838A2892D0 /* MenuBarController.swift */; };
+		D96D7A31919C64981363AE62 /* ModifierSequenceRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */; };
 		F5DB73B56685CCB1BBD78A0E /* ScreenInputSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,9 +28,11 @@
 		18DD5A06FA9701527654995E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTests.swift; sourceTree = "<group>"; };
 		87B868DFA7E92E838A2892D0 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierSequenceRecognizer.swift; sourceTree = "<group>"; };
 		B79470BE720CDF351D75398A /* ScreenInputSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenInputSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC5E9E31571A94232F01B6C0 /* ScreenInputSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenInputSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenInputSyncApp.swift; sourceTree = "<group>"; };
+		E49A3F8A3B88B237DFDA79C3 /* ModifierSequenceRecognizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierSequenceRecognizerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -70,15 +74,25 @@
 		71B737C280EBEBE9BA363ACD /* ScreenInputSyncTests */ = {
 			isa = PBXGroup;
 			children = (
+				E49A3F8A3B88B237DFDA79C3 /* ModifierSequenceRecognizerTests.swift */,
 				6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */,
 			);
 			path = ScreenInputSyncTests;
+			sourceTree = "<group>";
+		};
+		B9AEDDEE6C1992698774D9E5 /* Keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */,
+			);
+			path = Keyboard;
 			sourceTree = "<group>";
 		};
 		BAAC5AFCB5924C89A1104E76 /* ScreenInputSync */ = {
 			isa = PBXGroup;
 			children = (
 				2E6CF724CFF83448DB60F5D6 /* App */,
+				B9AEDDEE6C1992698774D9E5 /* Keyboard */,
 				699AA72CF0850A3160199D7B /* Resources */,
 			);
 			path = ScreenInputSync;
@@ -161,6 +175,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC93D0EB06BB0493F5D7AB55 /* ModifierSequenceRecognizerTests.swift in Sources */,
 				2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBC3977776A9A34A31F14F03 /* MenuBarController.swift in Sources */,
+				D96D7A31919C64981363AE62 /* ModifierSequenceRecognizer.swift in Sources */,
 				F5DB73B56685CCB1BBD78A0E /* ScreenInputSyncApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
