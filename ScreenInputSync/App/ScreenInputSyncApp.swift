@@ -84,6 +84,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             self?.updateLoginPresentation()
         }
         menu.onMenuWillOpen = { [weak self, weak menu] in
+            self?.updateLoginPresentation()
             do {
                 menu?.updateMode(try sourceController.currentMode())
                 menu?.updateStatus(self?.keyboardStatus ?? "Active in Screen Sharing")
@@ -98,6 +99,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor [weak self] in
+                self?.updateLoginPresentation()
                 guard !frontmostChecker.screenSharingIsFrontmost else { return }
                 self?.eventTapController?.setHUDActive(false)
                 self?.hudController?.dismiss()
