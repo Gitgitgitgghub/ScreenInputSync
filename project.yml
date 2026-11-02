@@ -1,0 +1,35 @@
+name: ScreenInputSync
+options:
+  bundleIdPrefix: com.brant
+  deploymentTarget:
+    macOS: "14.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+targets:
+  ScreenInputSync:
+    type: application
+    platform: macOS
+    sources:
+      - ScreenInputSync
+    info:
+      path: ScreenInputSync/Resources/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.brant.ScreenInputSync
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_STYLE: Automatic
+    scheme:
+      testTargets:
+        - ScreenInputSyncTests
+  ScreenInputSyncTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - ScreenInputSyncTests
+    dependencies:
+      - target: ScreenInputSync
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.brant.ScreenInputSyncTests
+        GENERATE_INFOPLIST_FILE: YES

@@ -1,0 +1,408 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */; };
+		BBC3977776A9A34A31F14F03 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B868DFA7E92E838A2892D0 /* MenuBarController.swift */; };
+		F5DB73B56685CCB1BBD78A0E /* ScreenInputSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		47BB97471D2D2F59D02E5F61 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEA84188FDFF7D92A0D5F2DB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D04A277C4A83C400D3BCB733;
+			remoteInfo = ScreenInputSync;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		18DD5A06FA9701527654995E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTests.swift; sourceTree = "<group>"; };
+		87B868DFA7E92E838A2892D0 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		B79470BE720CDF351D75398A /* ScreenInputSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenInputSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC5E9E31571A94232F01B6C0 /* ScreenInputSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenInputSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenInputSyncApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2E6CF724CFF83448DB60F5D6 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				87B868DFA7E92E838A2892D0 /* MenuBarController.swift */,
+				CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		659B016C16297647A4099068 = {
+			isa = PBXGroup;
+			children = (
+				BAAC5AFCB5924C89A1104E76 /* ScreenInputSync */,
+				71B737C280EBEBE9BA363ACD /* ScreenInputSyncTests */,
+				6CC417BCA7C9CE3F800ADD70 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		699AA72CF0850A3160199D7B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				18DD5A06FA9701527654995E /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6CC417BCA7C9CE3F800ADD70 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CC5E9E31571A94232F01B6C0 /* ScreenInputSync.app */,
+				B79470BE720CDF351D75398A /* ScreenInputSyncTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		71B737C280EBEBE9BA363ACD /* ScreenInputSyncTests */ = {
+			isa = PBXGroup;
+			children = (
+				6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */,
+			);
+			path = ScreenInputSyncTests;
+			sourceTree = "<group>";
+		};
+		BAAC5AFCB5924C89A1104E76 /* ScreenInputSync */ = {
+			isa = PBXGroup;
+			children = (
+				2E6CF724CFF83448DB60F5D6 /* App */,
+				699AA72CF0850A3160199D7B /* Resources */,
+			);
+			path = ScreenInputSync;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D04A277C4A83C400D3BCB733 /* ScreenInputSync */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B22B0E2E8F7BA765BDE8746C /* Build configuration list for PBXNativeTarget "ScreenInputSync" */;
+			buildPhases = (
+				E9380447C9FCC3F26F70E040 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ScreenInputSync;
+			packageProductDependencies = (
+			);
+			productName = ScreenInputSync;
+			productReference = CC5E9E31571A94232F01B6C0 /* ScreenInputSync.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F30D9BC31894B7444333A2D2 /* ScreenInputSyncTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 060F32E39CE719ED08166839 /* Build configuration list for PBXNativeTarget "ScreenInputSyncTests" */;
+			buildPhases = (
+				25CD72C76B9B1E7A8AAD5DA8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				83F7493B5A6E940C8FBB3732 /* PBXTargetDependency */,
+			);
+			name = ScreenInputSyncTests;
+			packageProductDependencies = (
+			);
+			productName = ScreenInputSyncTests;
+			productReference = B79470BE720CDF351D75398A /* ScreenInputSyncTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CEA84188FDFF7D92A0D5F2DB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					D04A277C4A83C400D3BCB733 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = CDB2D1A049EDF5F43A403DA3 /* Build configuration list for PBXProject "ScreenInputSync" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 659B016C16297647A4099068;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6CC417BCA7C9CE3F800ADD70 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D04A277C4A83C400D3BCB733 /* ScreenInputSync */,
+				F30D9BC31894B7444333A2D2 /* ScreenInputSyncTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		25CD72C76B9B1E7A8AAD5DA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9380447C9FCC3F26F70E040 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBC3977776A9A34A31F14F03 /* MenuBarController.swift in Sources */,
+				F5DB73B56685CCB1BBD78A0E /* ScreenInputSyncApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		83F7493B5A6E940C8FBB3732 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D04A277C4A83C400D3BCB733 /* ScreenInputSync */;
+			targetProxy = 47BB97471D2D2F59D02E5F61 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3EED051487F6112CDD82C3D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScreenInputSync/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.brant.ScreenInputSync;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		45C386AFED8A74B54443AF87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.brant.ScreenInputSyncTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreenInputSync.app/Contents/MacOS/ScreenInputSync";
+			};
+			name = Debug;
+		};
+		46D6C358C6D1726EA9AB8025 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.brant.ScreenInputSyncTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreenInputSync.app/Contents/MacOS/ScreenInputSync";
+			};
+			name = Release;
+		};
+		6FCE05772A5F06B03CE51A68 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScreenInputSync/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.brant.ScreenInputSync;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		79795212E994A8BD1227BA16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		92F56D731535D568F3B19782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		060F32E39CE719ED08166839 /* Build configuration list for PBXNativeTarget "ScreenInputSyncTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45C386AFED8A74B54443AF87 /* Debug */,
+				46D6C358C6D1726EA9AB8025 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B22B0E2E8F7BA765BDE8746C /* Build configuration list for PBXNativeTarget "ScreenInputSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EED051487F6112CDD82C3D8 /* Debug */,
+				6FCE05772A5F06B03CE51A68 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CDB2D1A049EDF5F43A403DA3 /* Build configuration list for PBXProject "ScreenInputSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92F56D731535D568F3B19782 /* Debug */,
+				79795212E994A8BD1227BA16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CEA84188FDFF7D92A0D5F2DB /* Project object */;
+}
