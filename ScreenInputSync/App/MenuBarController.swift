@@ -6,8 +6,9 @@ final class MenuBarController: NSObject {
     private let statusMenuItem: NSMenuItem
     private let modeMenuItem: NSMenuItem
     private let loginMenuItem: NSMenuItem
+    private let loginStatusMenuItem: NSMenuItem
     var onResync: (() -> Void)?
-    var onLaunchAtLoginChanged: ((Bool) -> Void)?
+    var onLaunchAtLoginSelected: (() -> Void)?
     var onMenuWillOpen: (() -> Void)?
 
     override init() {
@@ -15,6 +16,7 @@ final class MenuBarController: NSObject {
         statusMenuItem = NSMenuItem(title: "Ready", action: nil, keyEquivalent: "")
         modeMenuItem = NSMenuItem(title: "Input: Unknown", action: nil, keyEquivalent: "")
         loginMenuItem = NSMenuItem(title: "Launch at Login", action: #selector(toggleLoginItem), keyEquivalent: "")
+        loginStatusMenuItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
         super.init()
 
         statusItem.button?.image = NSImage(
@@ -36,6 +38,9 @@ final class MenuBarController: NSObject {
         resyncItem.target = self
         loginMenuItem.target = self
         menu.addItem(loginMenuItem)
+        loginStatusMenuItem.isEnabled = false
+        loginStatusMenuItem.isHidden = true
+        menu.addItem(loginStatusMenuItem)
         menu.addItem(.separator())
         menu.addItem(
             withTitle: "Quit \(AppMetadata.displayName)",
@@ -54,8 +59,20 @@ final class MenuBarController: NSObject {
         modeMenuItem.title = mode == .english ? "Input: ABC" : "Input: 注音"
     }
 
-    func setLaunchAtLogin(_ enabled: Bool) {
-        loginMenuItem.state = enabled ? .on : .off
+    func setLaunchAtLoginStatus(_ status: LoginItemStatus) {
+        switch status {
+        case .enabled:
+            loginMenuItem.state = .on
+        case .requiresApproval:
+            loginMenuItem.state = .mixed
+        case .notRegistered, .notFound:
+            loginMenuItem.state = .off
+        }
+    }
+
+    func updateLoginStatus(_ text: String?) {
+        loginStatusMenuItem.title = text ?? ""
+        loginStatusMenuItem.isHidden = text == nil
     }
 
     @objc private func showResync() {
@@ -63,9 +80,7 @@ final class MenuBarController: NSObject {
     }
 
     @objc private func toggleLoginItem() {
-        let enabled = loginMenuItem.state != .on
-        setLaunchAtLogin(enabled)
-        onLaunchAtLoginChanged?(enabled)
+        onLaunchAtLoginSelected?()
     }
 
     @objc private func quit() {

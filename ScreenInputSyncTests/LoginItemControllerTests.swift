@@ -24,9 +24,9 @@ final class LoginItemControllerTests: XCTestCase {
         let service = LoginServiceSpy(status: .notRegistered)
         service.registerError = LoginTestError.denied
         var reportedErrors: [Error] = []
-        let controller = LoginItemController(service: service) {
+        let controller = LoginItemController(service: service, onError: {
             reportedErrors.append($0)
-        }
+        })
 
         controller.enableIfNeeded()
 
@@ -45,6 +45,21 @@ final class LoginItemControllerTests: XCTestCase {
 
         XCTAssertEqual(relaunchedService.registerCount, 0)
         XCTAssertEqual(preferences.userChoice, false)
+    }
+
+    func testPendingApprovalMenuSelectionOpensSettingsWithoutRegisteringAgain() {
+        let service = LoginServiceSpy(status: .requiresApproval)
+        var settingsOpenCount = 0
+        let controller = LoginItemController(
+            service: service,
+            preferences: LoginPreferenceSpy(),
+            openSettings: { settingsOpenCount += 1 }
+        )
+
+        controller.handleMenuSelection()
+
+        XCTAssertEqual(settingsOpenCount, 1)
+        XCTAssertEqual(service.registerCount, 0)
     }
 }
 

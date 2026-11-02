@@ -63,14 +63,17 @@ final class LoginItemController {
     private let service: LoginItemServicing
     private let preferences: LoginItemPreferenceStoring
     private let onError: (Error) -> Void
+    private let openSettings: () -> Void
 
     init(
         service: LoginItemServicing = MainAppLoginItemService(),
         preferences: LoginItemPreferenceStoring = UserDefaultsLoginItemPreferences(),
+        openSettings: @escaping () -> Void = { SMAppService.openSystemSettingsLoginItems() },
         onError: @escaping (Error) -> Void = { _ in }
     ) {
         self.service = service
         self.preferences = preferences
+        self.openSettings = openSettings
         self.onError = onError
     }
 
@@ -81,6 +84,17 @@ final class LoginItemController {
         guard preferences.userChoice != false,
               service.status == .notRegistered else { return }
         setEnabled(true)
+    }
+
+    func handleMenuSelection() {
+        switch service.status {
+        case .requiresApproval:
+            openSettings()
+        case .enabled:
+            setEnabled(false)
+        case .notRegistered, .notFound:
+            setEnabled(true)
+        }
     }
 
     func setEnabled(_ enabled: Bool) {

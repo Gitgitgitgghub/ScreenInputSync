@@ -25,6 +25,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
     private var hudController: ResyncHUDController?
     private var loginItemController: LoginItemController?
     private var workspaceObserver: NSObjectProtocol?
+    private var keyboardStatus = "Starting keyboard monitor…"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else {
@@ -41,8 +42,11 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         let coordinator = InputSyncCoordinator(
             sourceController: sourceController,
             remoteEmitter: F17RemoteToggleEmitter(),
-            onModeChanged: { mode in
-                DispatchQueue.main.async { menu.updateMode(mode) }
+            onModeChanged: { [weak self] mode in
+                DispatchQueue.main.async {
+                    menu.updateMode(mode)
+                    menu.updateStatus(self?.keyboardStatus ?? "Active in Screen Sharing")
+                }
             },
             onError: { error in
                 DispatchQueue.main.async { menu.updateStatus("Error: \(error.localizedDescription)") }
@@ -50,17 +54,14 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         )
         inputSyncCoordinator = coordinator
 
-        let loginController = LoginItemController { error in
+        let loginController = LoginItemController(onError: { error in
             DispatchQueue.main.async {
-                menu.updateStatus("Login item error: \(error.localizedDescription)")
+                menu.updateLoginStatus("Login item error: \(error.localizedDescription)")
             }
-        }
+        })
         loginItemController = loginController
         loginController.enableIfNeeded()
-        menu.setLaunchAtLogin(loginController.isEnabled)
-        if loginController.status == .requiresApproval {
-            menu.updateStatus("Approve ScreenInputSync in System Settings → Login Items")
-        }
+        updateLoginPresentation()
 
         let frontmostChecker = WorkspaceFrontmostApplicationChecker()
         let eventTap = EventTapController(
@@ -78,13 +79,14 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             eventTap?.setHUDActive(true)
             hud?.show()
         }
-        menu.onLaunchAtLoginChanged = { [weak loginController, weak menu] enabled in
-            loginController?.setEnabled(enabled)
-            menu?.setLaunchAtLogin(loginController?.isEnabled == true)
+        menu.onLaunchAtLoginSelected = { [weak self, weak loginController] in
+            loginController?.handleMenuSelection()
+            self?.updateLoginPresentation()
         }
-        menu.onMenuWillOpen = { [weak menu] in
+        menu.onMenuWillOpen = { [weak self, weak menu] in
             do {
                 menu?.updateMode(try sourceController.currentMode())
+                menu?.updateStatus(self?.keyboardStatus ?? "Active in Screen Sharing")
             } catch {
                 menu?.updateStatus("Error: \(error.localizedDescription)")
             }
@@ -102,17 +104,16 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        do {
-            let mode = try sourceController.currentMode()
-            menu.updateMode(mode)
-        } catch {
-            menu.updateStatus("Error: \(error.localizedDescription)")
+        if PermissionController().ensureKeyboardPermissions() {
+            updateKeyboardStatus(eventTap.start() ? "Active in Screen Sharing" : "Unable to start keyboard monitor")
+        } else {
+            updateKeyboardStatus("Grant Accessibility and Input Monitoring, then relaunch")
         }
 
-        if PermissionController().ensureKeyboardPermissions() {
-            menu.updateStatus(eventTap.start() ? "Active in Screen Sharing" : "Unable to start keyboard monitor")
-        } else {
-            menu.updateStatus("Grant Accessibility and Input Monitoring, then relaunch")
+        do {
+            menu.updateMode(try sourceController.currentMode())
+        } catch {
+            menu.updateStatus("Error: \(error.localizedDescription)")
         }
     }
 
@@ -137,9 +138,24 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         case .dismissHUD, .dismissHUDPassingThrough:
             hudController?.dismiss()
         case .reenableTap:
-            menuBarController?.updateStatus("Keyboard monitor recovered")
+            updateKeyboardStatus("Keyboard monitor recovered")
         case .passThrough, .suppress:
             break
         }
+    }
+
+    private func updateKeyboardStatus(_ text: String) {
+        keyboardStatus = text
+        menuBarController?.updateStatus(text)
+    }
+
+    private func updateLoginPresentation() {
+        guard let controller = loginItemController else { return }
+        menuBarController?.setLaunchAtLoginStatus(controller.status)
+        menuBarController?.updateLoginStatus(
+            controller.status == .requiresApproval
+                ? "Approval required — click Launch at Login to open System Settings"
+                : nil
+        )
     }
 }
