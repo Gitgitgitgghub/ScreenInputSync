@@ -1,4 +1,4 @@
-enum KeyboardEvent: Equatable {
+enum KeyboardEvent: Equatable, Sendable {
     case commandDown
     case commandUp
     case shiftDown
@@ -12,7 +12,7 @@ enum KeyboardEvent: Equatable {
     case tapDisabled
 }
 
-enum RoutingDecision: Equatable {
+enum RoutingDecision: Equatable, Sendable {
     case passThrough
     case suppress
     case toggleBoth

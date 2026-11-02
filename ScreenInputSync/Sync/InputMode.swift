@@ -1,4 +1,4 @@
-enum InputMode: Equatable {
+enum InputMode: Equatable, Sendable {
     case english
     case chinese
 

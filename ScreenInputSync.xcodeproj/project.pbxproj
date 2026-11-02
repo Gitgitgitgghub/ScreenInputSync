@@ -7,19 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03A8E105337F1DD6F1F1CD5A /* ResyncHUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1359ED5CCB168B99B555C318 /* ResyncHUDController.swift */; };
 		07710BB264822DF57B40786B /* CarbonInputSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09CC544810AADF44AC6AD6E0 /* CarbonInputSourceController.swift */; };
 		2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */; };
 		30BD95FF3B44700D9B546A9B /* InputMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CBF3BC4B41462BD7DA965 /* InputMode.swift */; };
 		31B56E1D2189E1ACF400318F /* FrontmostApplicationChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB007A5937504DDB1DC8BFD /* FrontmostApplicationChecking.swift */; };
+		4AA98FE0DA33FDDA98D01170 /* LoginItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C110423E11AD401D1BE506A2 /* LoginItemController.swift */; };
 		64C2C61C2ACE3FD1B8BEF07E /* KeyboardActionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40400F97DC5F608EFE485D6F /* KeyboardActionRouter.swift */; };
 		6A3E1DB5F23859AD2B930733 /* InputSyncCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F535EF732AC517FCC92891B1 /* InputSyncCoordinatorTests.swift */; };
 		754BB368CAD08CEAA67C06CB /* EventTapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D9747F4063630EFEEDB794 /* EventTapController.swift */; };
 		83E45A79B3914F440B4804D1 /* CarbonInputSourceMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB18EC5136BC7671EAD79B2 /* CarbonInputSourceMatchingTests.swift */; };
 		AC93D0EB06BB0493F5D7AB55 /* ModifierSequenceRecognizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49A3F8A3B88B237DFDA79C3 /* ModifierSequenceRecognizerTests.swift */; };
+		B23DF5F375C8C5DFB9F5F847 /* LoginItemControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25CE24274F3FE1186D09B282 /* LoginItemControllerTests.swift */; };
 		B731596F964E9E95BFE28A16 /* F17RemoteToggleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5350A3B21419DA1D5BD359F2 /* F17RemoteToggleEmitter.swift */; };
 		BBC3977776A9A34A31F14F03 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B868DFA7E92E838A2892D0 /* MenuBarController.swift */; };
 		D8BAE83CFF7157C95EB4F8C1 /* InputSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF4E8B75A5F233C4D352F8 /* InputSyncCoordinator.swift */; };
 		D96D7A31919C64981363AE62 /* ModifierSequenceRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */; };
+		DA9EC8B7DC808683FCCFC986 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD3B66530B8331F3B4DB8F5 /* PermissionController.swift */; };
 		F5DB73B56685CCB1BBD78A0E /* ScreenInputSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */; };
 		F6FEBC5DE72FBB1E3F59C01D /* KeyboardActionRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E9F1E2052473790EB38396 /* KeyboardActionRouterTests.swift */; };
 /* End PBXBuildFile section */
@@ -36,9 +40,12 @@
 
 /* Begin PBXFileReference section */
 		09CC544810AADF44AC6AD6E0 /* CarbonInputSourceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbonInputSourceController.swift; sourceTree = "<group>"; };
+		1359ED5CCB168B99B555C318 /* ResyncHUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResyncHUDController.swift; sourceTree = "<group>"; };
 		18DD5A06FA9701527654995E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		18E9F1E2052473790EB38396 /* KeyboardActionRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardActionRouterTests.swift; sourceTree = "<group>"; };
+		25CE24274F3FE1186D09B282 /* LoginItemControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemControllerTests.swift; sourceTree = "<group>"; };
 		2AB18EC5136BC7671EAD79B2 /* CarbonInputSourceMatchingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbonInputSourceMatchingTests.swift; sourceTree = "<group>"; };
+		3DD3B66530B8331F3B4DB8F5 /* PermissionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionController.swift; sourceTree = "<group>"; };
 		3EB007A5937504DDB1DC8BFD /* FrontmostApplicationChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontmostApplicationChecking.swift; sourceTree = "<group>"; };
 		40400F97DC5F608EFE485D6F /* KeyboardActionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardActionRouter.swift; sourceTree = "<group>"; };
 		5350A3B21419DA1D5BD359F2 /* F17RemoteToggleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F17RemoteToggleEmitter.swift; sourceTree = "<group>"; };
@@ -47,6 +54,7 @@
 		87B868DFA7E92E838A2892D0 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierSequenceRecognizer.swift; sourceTree = "<group>"; };
 		B79470BE720CDF351D75398A /* ScreenInputSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenInputSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C110423E11AD401D1BE506A2 /* LoginItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemController.swift; sourceTree = "<group>"; };
 		C78CBF3BC4B41462BD7DA965 /* InputMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMode.swift; sourceTree = "<group>"; };
 		CC5E9E31571A94232F01B6C0 /* ScreenInputSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenInputSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenInputSyncApp.swift; sourceTree = "<group>"; };
@@ -71,6 +79,14 @@
 				CFE02E9FEF74A7F7D5C504FB /* ScreenInputSyncApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		546926F1972F8F5CF3DD0C01 /* Startup */ = {
+			isa = PBXGroup;
+			children = (
+				C110423E11AD401D1BE506A2 /* LoginItemController.swift */,
+			);
+			path = Startup;
 			sourceTree = "<group>";
 		};
 		659B016C16297647A4099068 = {
@@ -105,10 +121,19 @@
 				2AB18EC5136BC7671EAD79B2 /* CarbonInputSourceMatchingTests.swift */,
 				F535EF732AC517FCC92891B1 /* InputSyncCoordinatorTests.swift */,
 				18E9F1E2052473790EB38396 /* KeyboardActionRouterTests.swift */,
+				25CE24274F3FE1186D09B282 /* LoginItemControllerTests.swift */,
 				E49A3F8A3B88B237DFDA79C3 /* ModifierSequenceRecognizerTests.swift */,
 				6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */,
 			);
 			path = ScreenInputSyncTests;
+			sourceTree = "<group>";
+		};
+		A274CE690A42AA8F22530C95 /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				3DD3B66530B8331F3B4DB8F5 /* PermissionController.swift */,
+			);
+			path = Permissions;
 			sourceTree = "<group>";
 		};
 		B5E35FCE78E7A53A02A98CDE /* Sync */ = {
@@ -137,9 +162,12 @@
 				2E6CF724CFF83448DB60F5D6 /* App */,
 				BF112418337F4EF35A18C1C2 /* Input */,
 				B9AEDDEE6C1992698774D9E5 /* Keyboard */,
+				A274CE690A42AA8F22530C95 /* Permissions */,
 				699AA72CF0850A3160199D7B /* Resources */,
 				0C6A5D26EFF0250BFD2C5F8B /* ScreenSharing */,
+				546926F1972F8F5CF3DD0C01 /* Startup */,
 				B5E35FCE78E7A53A02A98CDE /* Sync */,
+				F62DA14B1717257511856714 /* UI */,
 			);
 			path = ScreenInputSync;
 			sourceTree = "<group>";
@@ -150,6 +178,14 @@
 				09CC544810AADF44AC6AD6E0 /* CarbonInputSourceController.swift */,
 			);
 			path = Input;
+			sourceTree = "<group>";
+		};
+		F62DA14B1717257511856714 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				1359ED5CCB168B99B555C318 /* ResyncHUDController.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +268,7 @@
 				83E45A79B3914F440B4804D1 /* CarbonInputSourceMatchingTests.swift in Sources */,
 				6A3E1DB5F23859AD2B930733 /* InputSyncCoordinatorTests.swift in Sources */,
 				F6FEBC5DE72FBB1E3F59C01D /* KeyboardActionRouterTests.swift in Sources */,
+				B23DF5F375C8C5DFB9F5F847 /* LoginItemControllerTests.swift in Sources */,
 				AC93D0EB06BB0493F5D7AB55 /* ModifierSequenceRecognizerTests.swift in Sources */,
 				2FA7C9ABA1874AE4EF0C65FC /* SmokeTests.swift in Sources */,
 			);
@@ -248,8 +285,11 @@
 				30BD95FF3B44700D9B546A9B /* InputMode.swift in Sources */,
 				D8BAE83CFF7157C95EB4F8C1 /* InputSyncCoordinator.swift in Sources */,
 				64C2C61C2ACE3FD1B8BEF07E /* KeyboardActionRouter.swift in Sources */,
+				4AA98FE0DA33FDDA98D01170 /* LoginItemController.swift in Sources */,
 				BBC3977776A9A34A31F14F03 /* MenuBarController.swift in Sources */,
 				D96D7A31919C64981363AE62 /* ModifierSequenceRecognizer.swift in Sources */,
+				DA9EC8B7DC808683FCCFC986 /* PermissionController.swift in Sources */,
+				03A8E105337F1DD6F1F1CD5A /* ResyncHUDController.swift in Sources */,
 				F5DB73B56685CCB1BBD78A0E /* ScreenInputSyncApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
