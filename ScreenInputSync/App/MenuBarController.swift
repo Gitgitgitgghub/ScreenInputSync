@@ -27,12 +27,12 @@ final class MenuBarController: NSObject {
         menu.addItem(statusMenuItem)
         menu.addItem(.separator())
         let resyncItem = menu.addItem(
-            withTitle: "對齊遠端輸入法…",
+            withTitle: "對齊遠端輸入法",
             action: #selector(showResync),
             keyEquivalent: ""
         )
         resyncItem.target = self
-        resyncItem.attributedTitle = Self.titleWithHint("對齊遠端輸入法…", hint: "⌘⇧")
+        resyncItem.attributedTitle = Self.titleWithHint("對齊遠端輸入法", hint: "⌘⇧")
         resyncItem.toolTip = "僅限螢幕共享位於前景時使用。快捷鍵：在螢幕共享中同時按下 ⌘ 和 ⇧ 再放開（中間不要按其他鍵）"
         loginMenuItem.target = self
         menu.addItem(loginMenuItem)
@@ -40,7 +40,7 @@ final class MenuBarController: NSObject {
         loginStatusMenuItem.isHidden = true
         menu.addItem(loginStatusMenuItem)
         menu.addItem(
-            withTitle: "開啟輔助使用權限設定…",
+            withTitle: "開啟輔助使用權限設定",
             action: #selector(openAccessibilitySettings),
             keyEquivalent: ""
         ).target = self
@@ -58,19 +58,14 @@ final class MenuBarController: NSObject {
         statusMenuItem.title = text
     }
 
-    /// Mimics the menu's shortcut column for a gesture that cannot be a real
-    /// key equivalent (Command + Shift released without another key).
+    /// Appends the resync gesture right after the title. The gesture
+    /// (Command + Shift released alone) cannot be a real key equivalent.
     private static func titleWithHint(_ title: String, hint: String) -> NSAttributedString {
         let font = NSFont.menuFont(ofSize: 0)
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.tabStops = [NSTextTab(textAlignment: .right, location: 250)]
-        let result = NSMutableAttributedString(
-            string: title,
-            attributes: [.font: font, .paragraphStyle: paragraph]
-        )
+        let result = NSMutableAttributedString(string: title, attributes: [.font: font])
         result.append(NSAttributedString(
-            string: "\t" + hint,
-            attributes: [.font: font, .paragraphStyle: paragraph, .foregroundColor: NSColor.secondaryLabelColor]
+            string: "  " + hint,
+            attributes: [.font: font, .foregroundColor: NSColor.secondaryLabelColor]
         ))
         return result
     }
