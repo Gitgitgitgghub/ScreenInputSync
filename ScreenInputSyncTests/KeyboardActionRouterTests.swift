@@ -8,10 +8,17 @@ final class KeyboardActionRouterTests: XCTestCase {
         XCTAssertEqual(router.route(.commandDown, screenSharingIsFrontmost: false), .passThrough)
     }
 
-    func testEveryCapsLockLatchChangeIsSuppressedAndTogglesInsideScreenSharing() {
+    func testCapsLockPressReleaseTogglesExactlyOnceInsideScreenSharing() {
         var router = KeyboardActionRouter()
         XCTAssertEqual(router.route(.capsLockPressed, screenSharingIsFrontmost: true), .toggleBoth)
+        XCTAssertEqual(router.route(.capsLockReleased, screenSharingIsFrontmost: true), .suppress)
         XCTAssertEqual(router.route(.capsLockPressed, screenSharingIsFrontmost: true), .toggleBoth)
+        XCTAssertEqual(router.route(.capsLockReleased, screenSharingIsFrontmost: true), .suppress)
+    }
+
+    func testCapsLockReleasePassesThroughOutsideScreenSharing() {
+        var router = KeyboardActionRouter()
+        XCTAssertEqual(router.route(.capsLockReleased, screenSharingIsFrontmost: false), .passThrough)
     }
 
     func testOrderedGestureShowsHUDOnlyAfterBothModifiersRelease() {

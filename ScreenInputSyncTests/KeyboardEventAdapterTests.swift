@@ -3,14 +3,15 @@ import XCTest
 @testable import ScreenInputSync
 
 final class KeyboardEventAdapterTests: XCTestCase {
-    func testCapsLockLatchedOnAndLatchedOffAreBothPhysicalPresses() {
+    func testCapsLockLatchOnIsPressAndLatchOffIsRelease() {
+        // Observed on macOS 15: press reports latch on, release reports latch off.
         XCTAssertEqual(
             KeyboardEventAdapter.map(type: .flagsChanged, keyCode: 57, flags: [.maskAlphaShift]),
             .capsLockPressed
         )
         XCTAssertEqual(
             KeyboardEventAdapter.map(type: .flagsChanged, keyCode: 57, flags: []),
-            .capsLockPressed
+            .capsLockReleased
         )
     }
 

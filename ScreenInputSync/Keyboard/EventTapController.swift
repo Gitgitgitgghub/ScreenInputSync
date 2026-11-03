@@ -57,6 +57,12 @@ final class EventTapController: @unchecked Sendable {
         router.setHUDActive(false)
     }
 
+    /// Keeps the Caps Lock latch off so the next physical press inside Screen
+    /// Sharing is recognizable as a latch-on edge.
+    func clearCapsLock() {
+        capsLockState.clearCapsLock()
+    }
+
     func setHUDActive(_ active: Bool) {
         router.setHUDActive(active)
     }
@@ -86,7 +92,9 @@ final class EventTapController: @unchecked Sendable {
             keyboardEvent,
             screenSharingIsFrontmost: frontmostChecker.screenSharingIsFrontmost
         )
-        if decision == .toggleBoth { capsLockState.clearCapsLock() }
+        if decision == .toggleBoth || keyboardEvent == .capsLockReleased && decision == .suppress {
+            capsLockState.clearCapsLock()
+        }
         if decision != .passThrough { onDecision(decision) }
         return decision.suppressesEvent ? nil : Unmanaged.passUnretained(event)
     }
@@ -113,9 +121,11 @@ enum KeyboardEventAdapter {
             case 56, 60:
                 return flags.contains(.maskShift) ? .shiftDown : .shiftUp
             case 57:
-                // Caps Lock emits one flagsChanged event per physical press.
-                // maskAlphaShift is the new latch state, not a key-down edge.
-                return .capsLockPressed
+                // Caps Lock can emit flagsChanged on both press and release
+                // (e.g. with the system's Caps Lock input-switching handling).
+                // Inside Screen Sharing the latch is kept off, so a physical
+                // press always latches on; a latch-off event is the release.
+                return flags.contains(.maskAlphaShift) ? .capsLockPressed : .capsLockReleased
             default:
                 return nil
             }

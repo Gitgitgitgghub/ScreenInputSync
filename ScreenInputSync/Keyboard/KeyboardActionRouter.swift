@@ -4,6 +4,7 @@ enum KeyboardEvent: Equatable, Sendable {
     case shiftDown
     case shiftUp
     case capsLockPressed
+    case capsLockReleased
     case englishKeyDown
     case chineseKeyDown
     case escapeKeyDown
@@ -77,6 +78,8 @@ struct KeyboardActionRouter {
         switch event {
         case .capsLockPressed:
             return .toggleBoth
+        case .capsLockReleased:
+            return .suppress
         case .commandDown:
             return decision(for: recognizer.handle(.commandDown))
         case .commandUp:

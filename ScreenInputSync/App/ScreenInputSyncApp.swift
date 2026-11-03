@@ -100,7 +100,10 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         ) { [weak self] _ in
             Task { @MainActor [weak self] in
                 self?.updateLoginPresentation()
-                guard !frontmostChecker.screenSharingIsFrontmost else { return }
+                guard !frontmostChecker.screenSharingIsFrontmost else {
+                    self?.eventTapController?.clearCapsLock()
+                    return
+                }
                 self?.eventTapController?.setHUDActive(false)
                 self?.hudController?.dismiss()
             }
