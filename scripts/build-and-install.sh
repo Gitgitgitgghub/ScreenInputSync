@@ -9,17 +9,19 @@ BUILT_APP="$DERIVED_DATA/Build/Products/Release/$APP_NAME"
 INSTALLED_APP="$INSTALL_DIR/$APP_NAME"
 SIGNING_IDENTITY="${CODE_SIGN_IDENTITY:-}"
 
-command -v xcodegen >/dev/null || {
-  echo "XcodeGen is required. Install it with: brew install xcodegen" >&2
-  exit 1
-}
 command -v xcodebuild >/dev/null || {
-  echo "Xcode command-line tools are required." >&2
+  echo "Xcode 16 or later is required." >&2
   exit 1
 }
 
 cd "$ROOT_DIR"
-xcodegen generate
+# The generated project is committed, so XcodeGen is optional: it is only
+# needed after adding, removing or renaming source files.
+if command -v xcodegen >/dev/null; then
+  xcodegen generate
+else
+  echo "XcodeGen not found; building the committed ScreenInputSync.xcodeproj."
+fi
 
 if [[ -z "$SIGNING_IDENTITY" ]]; then
   SIGNING_IDENTITY="$(/usr/bin/security find-identity -v -p codesigning 2>/dev/null \

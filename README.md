@@ -29,7 +29,8 @@
 - macOS 14 或更新版本
 - 本機已啟用 ABC 與「繁體中文－注音」
 - 遠端把 F17 設為「選取上一個輸入方式」，且切換循環只有 ABC／注音
-- 開發建置需要 Xcode 與 XcodeGen：`brew install xcodegen`
+- 編譯需要 **Xcode 16 或更新版本**（專案使用 Swift 6）
+- XcodeGen（`brew install xcodegen`）為選用：專案檔已放在 git 中，只有新增、刪除或改名原始碼檔案後才需要執行 `xcodegen generate`
 
 ## 建置與安裝
 
