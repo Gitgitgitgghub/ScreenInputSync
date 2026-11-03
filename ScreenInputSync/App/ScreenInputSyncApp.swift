@@ -27,7 +27,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
     private var loginItemController: LoginItemController?
     private var workspaceObserver: NSObjectProtocol?
     private var inputSourceObserver: NSObjectProtocol?
-    private var keyboardStatus = "Starting keyboard monitor…"
+    private var keyboardStatus = "啟動中…"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else {
@@ -44,21 +44,21 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         let coordinator = InputSyncCoordinator(
             sourceController: sourceController,
             remoteEmitter: F17RemoteToggleEmitter(),
-            onModeChanged: { [weak self] mode in
+            onModeChanged: { [weak self] _ in
                 DispatchQueue.main.async {
-                    menu.updateMode(mode)
-                    menu.updateStatus(self?.keyboardStatus ?? "Active in Screen Sharing")
+                    self?.refreshModeDisplay()
+                    menu.updateStatus(self?.keyboardStatus ?? Self.activeStatus)
                 }
             },
             onError: { error in
-                DispatchQueue.main.async { menu.updateStatus("Error: \(error.localizedDescription)") }
+                DispatchQueue.main.async { menu.updateStatus("錯誤：\(error.localizedDescription)") }
             }
         )
         inputSyncCoordinator = coordinator
 
         let loginController = LoginItemController(onError: { error in
             DispatchQueue.main.async {
-                menu.updateLoginStatus("Login item error: \(error.localizedDescription)")
+                menu.updateLoginStatus("登入項目錯誤：\(error.localizedDescription)")
             }
         })
         loginItemController = loginController
@@ -75,7 +75,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
 
         menu.onResync = { [weak eventTap, weak hud] in
             guard frontmostChecker.screenSharingIsFrontmost else {
-                menu.updateStatus("Resync is available only while Screen Sharing is frontmost")
+                menu.updateStatus("請先切到螢幕共享視窗再對齊")
                 return
             }
             eventTap?.setHUDActive(true)
@@ -87,22 +87,18 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         }
         menu.onMenuWillOpen = { [weak self, weak menu] in
             self?.updateLoginPresentation()
-            do {
-                menu?.updateMode(try sourceController.currentMode())
-                menu?.updateStatus(self?.keyboardStatus ?? "Active in Screen Sharing")
-            } catch {
-                menu?.updateStatus("Error: \(error.localizedDescription)")
-            }
+            self?.refreshModeDisplay()
+            menu?.updateStatus(self?.keyboardStatus ?? Self.activeStatus)
         }
 
         inputSourceObserver = DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String),
             object: nil,
             queue: .main
-        ) { _ in
-            Task { @MainActor in
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
                 coordinator.localSourceDidChange()
-                if let mode = try? sourceController.currentMode() { menu.updateMode(mode) }
+                self?.refreshModeDisplay()
             }
         }
 
@@ -116,29 +112,36 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
                 guard !frontmostChecker.screenSharingIsFrontmost else {
                     self?.eventTapController?.clearCapsLock()
                     coordinator.screenSharingDidBecomeFrontmost()
+                    self?.refreshModeDisplay()
                     return
                 }
                 coordinator.screenSharingDidResignFrontmost()
+                self?.refreshModeDisplay()
                 self?.eventTapController?.setHUDActive(false)
                 self?.hudController?.dismiss()
             }
         }
 
         if PermissionController().ensureKeyboardPermissions() {
-            updateKeyboardStatus(eventTap.start() ? "Active in Screen Sharing" : "Unable to start keyboard monitor")
+            updateKeyboardStatus(eventTap.start() ? Self.activeStatus : "無法啟動鍵盤監控，請重新開啟 App")
         } else {
-            updateKeyboardStatus("Grant Accessibility and Input Monitoring, then relaunch")
+            updateKeyboardStatus("請允許「輔助使用」與「輸入監控」後重新開啟")
         }
 
         if frontmostChecker.screenSharingIsFrontmost {
             coordinator.screenSharingDidBecomeFrontmost()
         }
 
-        do {
-            menu.updateMode(try sourceController.currentMode())
-        } catch {
-            menu.updateStatus("Error: \(error.localizedDescription)")
-        }
+        refreshModeDisplay()
+    }
+
+    private static let activeStatus = "運作中：在螢幕共享按 Caps Lock 切換"
+
+    private func refreshModeDisplay() {
+        menuBarController?.updateMode(
+            local: try? CarbonInputSourceController().currentMode(),
+            remote: inputSyncCoordinator?.remoteMode
+        )
     }
 
     private func handle(_ decision: RoutingDecision) {
@@ -162,7 +165,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         case .dismissHUD, .dismissHUDPassingThrough:
             hudController?.dismiss()
         case .reenableTap:
-            updateKeyboardStatus("Keyboard monitor recovered")
+            updateKeyboardStatus(Self.activeStatus)
         case .passThrough, .suppress:
             break
         }
@@ -178,7 +181,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         menuBarController?.setLaunchAtLoginStatus(controller.status)
         menuBarController?.updateLoginStatus(
             controller.status == .requiresApproval
-                ? "Approval required — click Launch at Login to open System Settings"
+                ? "需要核准：點「登入時啟動」前往系統設定"
                 : nil
         )
     }
