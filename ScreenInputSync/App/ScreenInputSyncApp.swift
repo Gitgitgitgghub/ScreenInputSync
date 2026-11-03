@@ -45,10 +45,8 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             sourceController: sourceController,
             remoteEmitter: F17RemoteToggleEmitter(),
             onModeChanged: { [weak self] _ in
-                DispatchQueue.main.async {
-                    self?.refreshModeDisplay()
-                    menu.updateStatus(self?.keyboardStatus ?? Self.activeStatus)
-                }
+                // A successful switch clears any previous error message.
+                DispatchQueue.main.async { menu.updateStatus(self?.keyboardStatus ?? Self.activeStatus) }
             },
             onError: { error in
                 DispatchQueue.main.async { menu.updateStatus("錯誤：\(error.localizedDescription)") }
@@ -87,19 +85,14 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         }
         menu.onMenuWillOpen = { [weak self, weak menu] in
             self?.updateLoginPresentation()
-            self?.refreshModeDisplay()
-            menu?.updateStatus(self?.keyboardStatus ?? Self.activeStatus)
         }
 
         inputSourceObserver = DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String),
             object: nil,
             queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor [weak self] in
-                coordinator.localSourceDidChange()
-                self?.refreshModeDisplay()
-            }
+        ) { _ in
+            Task { @MainActor in coordinator.localSourceDidChange() }
         }
 
         workspaceObserver = NSWorkspace.shared.notificationCenter.addObserver(
@@ -112,11 +105,9 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
                 guard !frontmostChecker.screenSharingIsFrontmost else {
                     self?.eventTapController?.clearCapsLock()
                     coordinator.screenSharingDidBecomeFrontmost()
-                    self?.refreshModeDisplay()
                     return
                 }
                 coordinator.screenSharingDidResignFrontmost()
-                self?.refreshModeDisplay()
                 self?.eventTapController?.setHUDActive(false)
                 self?.hudController?.dismiss()
             }
@@ -132,17 +123,9 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             coordinator.screenSharingDidBecomeFrontmost()
         }
 
-        refreshModeDisplay()
     }
 
     private static let activeStatus = "運作中：在螢幕共享按 Caps Lock 切換"
-
-    private func refreshModeDisplay() {
-        menuBarController?.updateMode(
-            local: try? CarbonInputSourceController().currentMode(),
-            remote: inputSyncCoordinator?.remoteMode
-        )
-    }
 
     private func handle(_ decision: RoutingDecision) {
         switch decision {

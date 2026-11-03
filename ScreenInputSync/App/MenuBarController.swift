@@ -4,7 +4,6 @@ import AppKit
 final class MenuBarController: NSObject {
     private let statusItem: NSStatusItem
     private let statusMenuItem: NSMenuItem
-    private let modeMenuItem: NSMenuItem
     private let loginMenuItem: NSMenuItem
     private let loginStatusMenuItem: NSMenuItem
     var onResync: (() -> Void)?
@@ -14,7 +13,6 @@ final class MenuBarController: NSObject {
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusMenuItem = NSMenuItem(title: "啟動中…", action: nil, keyEquivalent: "")
-        modeMenuItem = NSMenuItem(title: "本機：—　遠端：—", action: nil, keyEquivalent: "")
         loginMenuItem = NSMenuItem(title: "登入時啟動", action: #selector(toggleLoginItem), keyEquivalent: "")
         loginStatusMenuItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
         super.init()
@@ -26,9 +24,7 @@ final class MenuBarController: NSObject {
 
         let menu = NSMenu()
         statusMenuItem.isEnabled = false
-        modeMenuItem.isEnabled = false
         menu.addItem(statusMenuItem)
-        menu.addItem(modeMenuItem)
         menu.addItem(.separator())
         let resyncItem = menu.addItem(
             withTitle: "對齊遠端輸入法…",
@@ -57,11 +53,6 @@ final class MenuBarController: NSObject {
         statusMenuItem.title = text
     }
 
-    func updateMode(local: InputMode?, remote: InputMode?) {
-        modeMenuItem.title = "本機：\(Self.name(local))　遠端：\(remote.map { Self.name($0) } ?? "尚未得知")"
-        modeMenuItem.toolTip = "遠端輸入法是依 Caps Lock 次數推算的；若與遠端畫面不符，請用「對齊遠端輸入法…」"
-    }
-
     /// Mimics the menu's shortcut column for a gesture that cannot be a real
     /// key equivalent (Command + Shift released without another key).
     private static func titleWithHint(_ title: String, hint: String) -> NSAttributedString {
@@ -77,14 +68,6 @@ final class MenuBarController: NSObject {
             attributes: [.font: font, .paragraphStyle: paragraph, .foregroundColor: NSColor.secondaryLabelColor]
         ))
         return result
-    }
-
-    private static func name(_ mode: InputMode?) -> String {
-        switch mode {
-        case .english: return "ABC"
-        case .chinese: return "注音"
-        case nil: return "其他"
-        }
     }
 
     func setLaunchAtLoginStatus(_ status: LoginItemStatus) {
