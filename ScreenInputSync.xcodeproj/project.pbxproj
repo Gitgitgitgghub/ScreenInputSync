@@ -22,7 +22,6 @@
 		B23DF5F375C8C5DFB9F5F847 /* LoginItemControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25CE24274F3FE1186D09B282 /* LoginItemControllerTests.swift */; };
 		B731596F964E9E95BFE28A16 /* F17RemoteToggleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5350A3B21419DA1D5BD359F2 /* F17RemoteToggleEmitter.swift */; };
 		BBC3977776A9A34A31F14F03 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B868DFA7E92E838A2892D0 /* MenuBarController.swift */; };
-		D0B2F1672B5BD8969D8733E5 /* CapsLockStateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F89BEA0ABFADD2873D8EC /* CapsLockStateController.swift */; };
 		D8BAE83CFF7157C95EB4F8C1 /* InputSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF4E8B75A5F233C4D352F8 /* InputSyncCoordinator.swift */; };
 		D96D7A31919C64981363AE62 /* ModifierSequenceRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */; };
 		DA9EC8B7DC808683FCCFC986 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD3B66530B8331F3B4DB8F5 /* PermissionController.swift */; };
@@ -54,7 +53,6 @@
 		54EF4E8B75A5F233C4D352F8 /* InputSyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputSyncCoordinator.swift; sourceTree = "<group>"; };
 		6354F96B5FEFD690DADB82D1 /* SmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTests.swift; sourceTree = "<group>"; };
 		87B868DFA7E92E838A2892D0 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
-		899F89BEA0ABFADD2873D8EC /* CapsLockStateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsLockStateController.swift; sourceTree = "<group>"; };
 		92C5FD552F20CE2215A47D18 /* ModifierSequenceRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierSequenceRecognizer.swift; sourceTree = "<group>"; };
 		B79470BE720CDF351D75398A /* ScreenInputSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenInputSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B83E6695C516527F6042313A /* KeyboardEventAdapterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardEventAdapterTests.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		B9AEDDEE6C1992698774D9E5 /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				899F89BEA0ABFADD2873D8EC /* CapsLockStateController.swift */,
 				D0D9747F4063630EFEEDB794 /* EventTapController.swift */,
 				5350A3B21419DA1D5BD359F2 /* F17RemoteToggleEmitter.swift */,
 				40400F97DC5F608EFE485D6F /* KeyboardActionRouter.swift */,
@@ -285,7 +282,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0B2F1672B5BD8969D8733E5 /* CapsLockStateController.swift in Sources */,
 				07710BB264822DF57B40786B /* CarbonInputSourceController.swift in Sources */,
 				754BB368CAD08CEAA67C06CB /* EventTapController.swift in Sources */,
 				B731596F964E9E95BFE28A16 /* F17RemoteToggleEmitter.swift in Sources */,

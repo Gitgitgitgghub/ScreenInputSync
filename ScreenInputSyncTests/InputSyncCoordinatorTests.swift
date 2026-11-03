@@ -2,21 +2,15 @@ import XCTest
 @testable import ScreenInputSync
 
 final class InputSyncCoordinatorTests: XCTestCase {
-    func testToggleBothSelectsOppositeModeThenEmitsOneRemoteToggle() {
+    func testToggleRemoteEmitsOneRemoteToggleWithoutTouchingLocalSource() {
         let source = SourceSpy(mode: .english)
         let remote = RemoteSpy()
-        var reportedModes: [InputMode] = []
-        let coordinator = InputSyncCoordinator(
-            sourceController: source,
-            remoteEmitter: remote,
-            onModeChanged: { reportedModes.append($0) }
-        )
+        let coordinator = InputSyncCoordinator(sourceController: source, remoteEmitter: remote)
 
-        coordinator.toggleBoth()
+        coordinator.toggleRemote()
 
-        XCTAssertEqual(source.selectedModes, [.chinese])
+        XCTAssertEqual(source.selectedModes, [])
         XCTAssertEqual(remote.emissionCount, 1)
-        XCTAssertEqual(reportedModes, [.chinese])
     }
 
     func testAlignLocalSelectsRequestedModeWithoutRemoteToggle() {
@@ -37,23 +31,6 @@ final class InputSyncCoordinatorTests: XCTestCase {
         let coordinator = InputSyncCoordinator(sourceController: source, remoteEmitter: RemoteSpy())
 
         XCTAssertFalse(coordinator.alignLocal(to: .chinese))
-    }
-
-    func testSourceErrorIsReportedAndRemoteIsNotToggled() {
-        let source = SourceSpy(mode: .english)
-        source.error = TestError.sourceUnavailable
-        let remote = RemoteSpy()
-        var errors: [Error] = []
-        let coordinator = InputSyncCoordinator(
-            sourceController: source,
-            remoteEmitter: remote,
-            onError: { errors.append($0) }
-        )
-
-        coordinator.toggleBoth()
-
-        XCTAssertEqual(errors.count, 1)
-        XCTAssertEqual(remote.emissionCount, 0)
     }
 }
 

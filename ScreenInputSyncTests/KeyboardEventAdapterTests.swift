@@ -16,8 +16,8 @@ final class KeyboardEventAdapterTests: XCTestCase {
     }
 
     func testSyntheticLockStateChangeIsNotTreatedAsCapsLockPress() {
-        // IOHIDSetModifierLockState emits flagsChanged with keycode 255; clearing
-        // the latch after a Caps press must not re-trigger a toggle.
+        // The system clearing the latch emits flagsChanged with keycode 255;
+        // it must not be counted as another Caps Lock press.
         XCTAssertNil(KeyboardEventAdapter.map(type: .flagsChanged, keyCode: 255, flags: []))
         XCTAssertNil(KeyboardEventAdapter.map(type: .flagsChanged, keyCode: 255, flags: [.maskAlphaShift]))
     }

@@ -100,10 +100,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         ) { [weak self] _ in
             Task { @MainActor [weak self] in
                 self?.updateLoginPresentation()
-                guard !frontmostChecker.screenSharingIsFrontmost else {
-                    self?.eventTapController?.clearCapsLock()
-                    return
-                }
+                guard !frontmostChecker.screenSharingIsFrontmost else { return }
                 self?.eventTapController?.setHUDActive(false)
                 self?.hudController?.dismiss()
             }
@@ -124,8 +121,9 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
 
     private func handle(_ decision: RoutingDecision) {
         switch decision {
-        case .toggleBoth:
-            inputSyncCoordinator?.toggleBoth()
+        case .toggleRemote:
+            inputSyncCoordinator?.toggleRemote()
+            refreshModeAfterSystemSwitch()
         case .showResyncHUD:
             hudController?.show()
         case .chooseEnglish:
@@ -146,6 +144,13 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             updateKeyboardStatus("Keyboard monitor recovered")
         case .passThrough, .suppress:
             break
+        }
+    }
+
+    private func refreshModeAfterSystemSwitch() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let mode = try? CarbonInputSourceController().currentMode() else { return }
+            self?.menuBarController?.updateMode(mode)
         }
     }
 

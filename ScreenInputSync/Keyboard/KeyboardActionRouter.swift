@@ -15,7 +15,7 @@ enum KeyboardEvent: Equatable, Sendable {
 enum RoutingDecision: Equatable, Sendable {
     case passThrough
     case suppress
-    case toggleBoth
+    case toggleRemote
     case showResyncHUD
     case chooseEnglish
     case chooseChinese
@@ -25,7 +25,7 @@ enum RoutingDecision: Equatable, Sendable {
 
     var suppressesEvent: Bool {
         switch self {
-        case .passThrough, .reenableTap, .showResyncHUD, .dismissHUDPassingThrough:
+        case .passThrough, .reenableTap, .showResyncHUD, .dismissHUDPassingThrough, .toggleRemote:
             return false
         default:
             return true
@@ -77,9 +77,10 @@ struct KeyboardActionRouter {
 
         switch event {
         case .capsLockPressed:
-            return .toggleBoth
+            // The local system switches its own input source; only mirror it remotely.
+            return .toggleRemote
         case .capsLockReleased:
-            return .suppress
+            return .passThrough
         case .commandDown:
             return decision(for: recognizer.handle(.commandDown))
         case .commandUp:

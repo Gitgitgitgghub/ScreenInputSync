@@ -16,15 +16,10 @@ final class InputSyncCoordinator {
         self.onError = onError
     }
 
-    func toggleBoth() {
-        do {
-            let nextMode = try sourceController.currentMode().opposite
-            try sourceController.select(nextMode)
-            remoteEmitter.emitRemoteToggle()
-            onModeChanged(nextMode)
-        } catch {
-            onError(error)
-        }
+    /// The local Mac switches itself via the system Caps Lock setting; this
+    /// only asks the remote Mac to follow by sending its F17 shortcut.
+    func toggleRemote() {
+        remoteEmitter.emitRemoteToggle()
     }
 
     @discardableResult

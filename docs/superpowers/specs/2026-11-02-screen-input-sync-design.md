@@ -8,9 +8,8 @@ Build a local-only macOS menu bar utility that keeps the local Mac and an Apple 
 
 - The utility launches automatically at login and has no Dock icon.
 - Outside Apple Screen Sharing, Caps Lock behaves normally.
-- While Apple Screen Sharing is frontmost, pressing Caps Lock is suppressed and the utility:
-  1. explicitly changes the local input source between ABC and Traditional Chinese Zhuyin;
-  2. emits F17 to Screen Sharing, where F17 is configured to change the remote input source.
+- While Apple Screen Sharing is frontmost, Caps Lock still passes through so the local system switches ABC/Zhuyin itself (via "Use Caps Lock to switch to and from ABC"); the utility additionally emits F17 to Screen Sharing, where F17 is configured to change the remote input source.
+  - Revised 2026-11-03: the original design suppressed Caps Lock and selected the local source explicitly, which fought the system's own Caps Lock switching and toggled twice per press.
 - The tool shows the local source and status in a menu bar menu.
 - To repair drift, the user presses Command first, then Shift, and releases both without pressing another key. A centered HUD asks for `E` (the remote is ABC) or `C` (the remote is Chinese). The choice explicitly aligns the local source to the remote without changing the remote source.
 - Pressing another non-modifier key during Command-then-Shift cancels recognition so normal shortcuts such as Command-Shift-P are unaffected. Escape dismisses the HUD.

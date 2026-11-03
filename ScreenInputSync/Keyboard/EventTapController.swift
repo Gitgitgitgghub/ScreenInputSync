@@ -5,16 +5,13 @@ final class EventTapController: @unchecked Sendable {
     private var runLoopSource: CFRunLoopSource?
     private var router = KeyboardActionRouter()
     private let frontmostChecker: FrontmostApplicationChecking
-    private let capsLockState: CapsLockStateResetting
     private let onDecision: (RoutingDecision) -> Void
 
     init(
         frontmostChecker: FrontmostApplicationChecking,
-        capsLockState: CapsLockStateResetting = HIDCapsLockStateController(),
         onDecision: @escaping (RoutingDecision) -> Void
     ) {
         self.frontmostChecker = frontmostChecker
-        self.capsLockState = capsLockState
         self.onDecision = onDecision
     }
 
@@ -57,12 +54,6 @@ final class EventTapController: @unchecked Sendable {
         router.setHUDActive(false)
     }
 
-    /// Keeps the Caps Lock latch off so the next physical press inside Screen
-    /// Sharing is recognizable as a latch-on edge.
-    func clearCapsLock() {
-        capsLockState.clearCapsLock()
-    }
-
     func setHUDActive(_ active: Bool) {
         router.setHUDActive(active)
     }
@@ -92,9 +83,6 @@ final class EventTapController: @unchecked Sendable {
             keyboardEvent,
             screenSharingIsFrontmost: frontmostChecker.screenSharingIsFrontmost
         )
-        if decision == .toggleBoth || keyboardEvent == .capsLockReleased && decision == .suppress {
-            capsLockState.clearCapsLock()
-        }
         if decision != .passThrough { onDecision(decision) }
         return decision.suppressesEvent ? nil : Unmanaged.passUnretained(event)
     }
@@ -121,10 +109,9 @@ enum KeyboardEventAdapter {
             case 56, 60:
                 return flags.contains(.maskShift) ? .shiftDown : .shiftUp
             case 57:
-                // Caps Lock can emit flagsChanged on both press and release
-                // (e.g. with the system's Caps Lock input-switching handling).
-                // Inside Screen Sharing the latch is kept off, so a physical
-                // press always latches on; a latch-off event is the release.
+                // With macOS "Use Caps Lock to switch to and from ABC", a tap
+                // emits flagsChanged on press (latch on) and on release (latch
+                // off, after the system clears it while switching input).
                 return flags.contains(.maskAlphaShift) ? .capsLockPressed : .capsLockReleased
             default:
                 return nil
