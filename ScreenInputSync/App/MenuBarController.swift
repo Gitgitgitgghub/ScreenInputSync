@@ -36,8 +36,8 @@ final class MenuBarController: NSObject {
             keyEquivalent: ""
         )
         resyncItem.target = self
-        resyncItem.attributedTitle = Self.titleWithHint("對齊遠端輸入法…", hint: "⌘ → ⇧")
-        resyncItem.toolTip = "在螢幕共享中：先按住 ⌘，再按住 ⇧，然後兩鍵都放開"
+        resyncItem.attributedTitle = Self.titleWithHint("對齊遠端輸入法…", hint: "⌘⇧")
+        resyncItem.toolTip = "在螢幕共享中同時按下 ⌘ 和 ⇧，再放開（中間不要按其他鍵）"
         loginMenuItem.target = self
         menu.addItem(loginMenuItem)
         loginStatusMenuItem.isEnabled = false
@@ -63,7 +63,7 @@ final class MenuBarController: NSObject {
     }
 
     /// Mimics the menu's shortcut column for a gesture that cannot be a real
-    /// key equivalent (Command, then Shift, released without another key).
+    /// key equivalent (Command + Shift released without another key).
     private static func titleWithHint(_ title: String, hint: String) -> NSAttributedString {
         let font = NSFont.menuFont(ofSize: 0)
         let paragraph = NSMutableParagraphStyle()

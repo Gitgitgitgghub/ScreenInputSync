@@ -1,47 +1,40 @@
 # ScreenInputSync Design
 
+Last revised: 2026-11-03
+
 ## Intent
 
-Build a local-only macOS menu bar utility that keeps the local Mac and an Apple Screen Sharing session aligned between ABC and Traditional Chinese Zhuyin while preserving a one-key Caps Lock workflow for coding and Chinese comments.
+A local-only macOS menu bar utility that keeps typing in an Apple Screen Sharing session consistent with the remote Mac's displayed input source (ABC / Traditional Zhuyin), switched with one Caps Lock press.
 
-## User experience
+## Key finding
 
-- The utility launches automatically at login and has no Dock icon.
-- Outside Apple Screen Sharing, Caps Lock behaves normally.
-- While Apple Screen Sharing is frontmost, Caps Lock still passes through so the local system switches ABC/Zhuyin itself (via "Use Caps Lock to switch to and from ABC"); the utility additionally emits F17 to Screen Sharing, where F17 is configured to change the remote input source.
-  - Revised 2026-11-03: the original design suppressed Caps Lock and selected the local source explicitly, which fought the system's own Caps Lock switching and toggled twice per press.
-- The tool shows the local source and status in a menu bar menu.
-- To repair drift, the user presses Command first, then Shift, and releases both without pressing another key. A centered HUD asks for `E` (the remote is ABC) or `C` (the remote is Chinese). The choice explicitly aligns the local source to the remote without changing the remote source.
-- Pressing another non-modifier key during Command-then-Shift cancels recognition so normal shortcuts such as Command-Shift-P are unaffected. Escape dismisses the HUD.
+Screen Sharing converts keystrokes through the **local** input source before sending them, so the local source must equal the remote one:
+
+| Local | Remote | Result |
+|---|---|---|
+| Zhuyin | Zhuyin | composition works |
+| ABC | Zhuyin | literal letters, no composition |
+| ABC | ABC | correct half-width text |
+| Zhuyin | ABC | letters become Bopomofo symbols |
+
+Forwarding the Caps Lock lock state also puts the remote Zhuyin into its English mode, so Caps Lock must never reach the remote.
+
+## Behavior (while `com.apple.ScreenSharing` is frontmost)
+
+- Caps Lock press: select the opposite local source explicitly, emit F17 (remote shortcut "Select the previous input source"). Suppress the Caps Lock press/release and synthetic lock-state (keycode 255) events, strip `maskAlphaShift` from forwarded events, and clear the local HID Caps Lock latch.
+- The coordinator tracks the remote mode (unknown remote state cannot be read). On entering Screen Sharing the local source is set to it; if anything switches the local source meanwhile it is re-applied; on leaving, the user's previous local source is restored.
+- Resync: Command + Shift pressed together (any order) and released with no other key opens a HUD; `E`/`C` declares the remote mode and aligns only the local source (never F17); `Esc` cancels. Command-Shift-letter shortcuts pass through.
+- Outside Screen Sharing everything passes through unchanged.
 
 ## Architecture
 
-- A native Swift/AppKit menu bar application uses a `CGEventTap` to observe and suppress keyboard events only while `com.apple.ScreenSharing` is frontmost.
-- Carbon Text Input Source Services select ABC or Zhuyin explicitly; toggling does not depend on macOS input-source shortcuts.
-- A small pure state machine recognizes the ordered Command-then-Shift gesture and is unit tested independently of AppKit.
-- A coordinator owns input-source synchronization and depends on protocols for local source selection and F17 emission, allowing deterministic unit tests.
-- A borderless AppKit HUD captures E/C/Escape while active.
-- `SMAppService.mainApp` registers the application as a login item.
+- `EventTapController` (CGEventTap) → `KeyboardEventAdapter` → `KeyboardActionRouter` (pure, with `ModifierChordRecognizer`) → app delegate.
+- `InputSyncCoordinator` owns the tracked remote mode and local enforcement; depends on `InputSourceControlling` (Carbon TIS) and `RemoteToggleEmitting` (F17) for deterministic tests.
+- `HIDCapsLockStateController` clears the Caps Lock latch via `IOHIDSetModifierLockState`.
+- `ResyncHUDController` is a non-activating rounded panel; `SMAppService.mainApp` provides launch at login.
 
 ## Constraints
 
-- Initial deployment target: macOS 14.0.
-- Xcode 26.1.1 and Swift 6.2.1.
-- No third-party runtime dependencies.
-- The app requires Accessibility/Input Monitoring permission to suppress and emit keyboard events.
-- The remote Mac must map F17 to “Select the previous input source” and have only the intended ABC/Zhuyin pair in the switching cycle.
-- A local-only tool cannot inspect the remote input-source state; the explicit resync HUD is the recovery path when an event is missed or the remote source changes independently.
-
-## Migration from Karabiner
-
-Keep Karabiner active until the utility passes manual end-to-end testing. During app testing, disable the existing “Screen Sharing: Caps Lock to F18” rule to prevent duplicate events. After successful testing, remove the Karabiner rule, remove the local F18 input-source shortcut, and optionally uninstall Karabiner. Keep the remote F17 shortcut.
-
-## Success criteria
-
-- Caps Lock switches both Macs between ABC and Zhuyin during Screen Sharing.
-- Half-width uppercase English works in ABC with Shift.
-- Chinese composition works in Zhuyin.
-- Command-Shift-letter shortcuts do not open the resync HUD.
-- The ordered modifier-only gesture opens the HUD, E/C aligns local state, and Escape cancels.
-- Caps Lock remains unchanged outside Screen Sharing.
-- The app starts after login when enabled.
+- macOS 14+, Swift 6, no third-party runtime dependencies.
+- Requires Accessibility and Input Monitoring permission.
+- Signed with a stable Apple Development identity so permissions survive rebuilds.

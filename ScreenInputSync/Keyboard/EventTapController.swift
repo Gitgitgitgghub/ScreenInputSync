@@ -45,18 +45,6 @@ final class EventTapController: @unchecked Sendable {
         return true
     }
 
-    func stop() {
-        if let runLoopSource {
-            CFRunLoopRemoveSource(CFRunLoopGetMain(), runLoopSource, .commonModes)
-        }
-        if let eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-        }
-        runLoopSource = nil
-        eventTap = nil
-        router.setHUDActive(false)
-    }
-
     /// Keeps the local Caps Lock latch off so no lock state leaks to the remote.
     func clearCapsLock() {
         capsLockState.clearCapsLock()

@@ -28,13 +28,21 @@ final class KeyboardActionRouterTests: XCTestCase {
         XCTAssertEqual(router.route(.capsLockReleased, screenSharingIsFrontmost: false), .passThrough)
     }
 
-    func testOrderedGestureShowsHUDOnlyAfterBothModifiersRelease() {
+    func testCommandShiftChordShowsHUDOnlyAfterBothModifiersRelease() {
         var router = KeyboardActionRouter()
         XCTAssertEqual(router.route(.commandDown, screenSharingIsFrontmost: true), .passThrough)
         XCTAssertEqual(router.route(.shiftDown, screenSharingIsFrontmost: true), .passThrough)
         XCTAssertEqual(router.route(.commandUp, screenSharingIsFrontmost: true), .passThrough)
         XCTAssertEqual(router.route(.shiftUp, screenSharingIsFrontmost: true), .showResyncHUD)
         XCTAssertFalse(RoutingDecision.showResyncHUD.suppressesEvent)
+    }
+
+    func testShiftFirstChordAlsoShowsHUD() {
+        var router = KeyboardActionRouter()
+        _ = router.route(.shiftDown, screenSharingIsFrontmost: true)
+        _ = router.route(.commandDown, screenSharingIsFrontmost: true)
+        _ = router.route(.shiftUp, screenSharingIsFrontmost: true)
+        XCTAssertEqual(router.route(.commandUp, screenSharingIsFrontmost: true), .showResyncHUD)
     }
 
     func testCommandShiftLetterCancelsAndPassesThrough() {

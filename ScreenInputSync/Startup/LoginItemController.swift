@@ -78,7 +78,6 @@ final class LoginItemController {
     }
 
     var status: LoginItemStatus { service.status }
-    var isEnabled: Bool { service.status == .enabled }
 
     func enableIfNeeded() {
         guard preferences.userChoice != false,

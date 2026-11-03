@@ -35,7 +35,7 @@ enum RoutingDecision: Equatable, Sendable {
 }
 
 struct KeyboardActionRouter {
-    private var recognizer = ModifierSequenceRecognizer()
+    private var recognizer = ModifierChordRecognizer()
     private var hudIsActive = false
 
     mutating func setHUDActive(_ active: Bool) {
@@ -83,13 +83,13 @@ struct KeyboardActionRouter {
         case .capsLockReleased, .lockStateChanged:
             return .suppress
         case .commandDown:
-            return decision(for: recognizer.handle(.commandDown))
+            return chordDecision(.commandDown)
         case .commandUp:
-            return decision(for: recognizer.handle(.commandUp))
+            return chordDecision(.commandUp)
         case .shiftDown:
-            return decision(for: recognizer.handle(.shiftDown))
+            return chordDecision(.shiftDown)
         case .shiftUp:
-            return decision(for: recognizer.handle(.shiftUp))
+            return chordDecision(.shiftUp)
         case .englishKeyDown, .chineseKeyDown, .escapeKeyDown, .otherKeyDown:
             _ = recognizer.handle(.otherKeyDown)
             return .passThrough
@@ -98,8 +98,8 @@ struct KeyboardActionRouter {
         }
     }
 
-    private mutating func decision(for result: ModifierSequenceResult) -> RoutingDecision {
-        guard result == .triggered else { return .passThrough }
+    private mutating func chordDecision(_ event: ModifierChordEvent) -> RoutingDecision {
+        guard recognizer.handle(event) else { return .passThrough }
         hudIsActive = true
         return .showResyncHUD
     }

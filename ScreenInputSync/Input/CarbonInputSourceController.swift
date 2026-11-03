@@ -45,10 +45,18 @@ enum InputSourceDescriptorMatcher {
         for mode: InputMode,
         in descriptors: [InputSourceDescriptor]
     ) throws -> InputSourceDescriptor {
-        guard let descriptor = descriptors.first(where: { self.mode(for: $0) == mode }) else {
+        try require(mode, in: descriptors, descriptor: { $0 })
+    }
+
+    static func require<Item>(
+        _ mode: InputMode,
+        in items: [Item],
+        descriptor: (Item) -> InputSourceDescriptor
+    ) throws -> Item {
+        guard let item = items.first(where: { self.mode(for: descriptor($0)) == mode }) else {
             throw CarbonInputSourceError.sourceNotAvailable(mode)
         }
-        return descriptor
+        return item
     }
 }
 
@@ -63,15 +71,10 @@ final class CarbonInputSourceController: InputSourceControlling {
     }
 
     func select(_ mode: InputMode) throws {
-        let sources = inputSources()
-        let pairs = sources.map { (source: $0, descriptor: descriptor(for: $0)) }
-        guard let pair = pairs.first(where: {
-            InputSourceDescriptorMatcher.mode(for: $0.descriptor) == mode
-        }) else {
-            throw CarbonInputSourceError.sourceNotAvailable(mode)
-        }
-
-        let status = TISSelectInputSource(pair.source)
+        let source = try InputSourceDescriptorMatcher.require(
+            mode, in: inputSources(), descriptor: descriptor(for:)
+        )
+        let status = TISSelectInputSource(source)
         guard status == noErr else {
             throw CarbonInputSourceError.selectionFailed(status)
         }
