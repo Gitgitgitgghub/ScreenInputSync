@@ -36,6 +36,8 @@ final class MenuBarController: NSObject {
             keyEquivalent: ""
         )
         resyncItem.target = self
+        resyncItem.attributedTitle = Self.titleWithHint("對齊遠端輸入法…", hint: "⌘ → ⇧")
+        resyncItem.toolTip = "在螢幕共享中：先按住 ⌘，再按住 ⇧，然後兩鍵都放開"
         loginMenuItem.target = self
         menu.addItem(loginMenuItem)
         loginStatusMenuItem.isEnabled = false
@@ -58,6 +60,23 @@ final class MenuBarController: NSObject {
     func updateMode(local: InputMode?, remote: InputMode?) {
         modeMenuItem.title = "本機：\(Self.name(local))　遠端：\(remote.map { Self.name($0) } ?? "尚未得知")"
         modeMenuItem.toolTip = "遠端輸入法是依 Caps Lock 次數推算的；若與遠端畫面不符，請用「對齊遠端輸入法…」"
+    }
+
+    /// Mimics the menu's shortcut column for a gesture that cannot be a real
+    /// key equivalent (Command, then Shift, released without another key).
+    private static func titleWithHint(_ title: String, hint: String) -> NSAttributedString {
+        let font = NSFont.menuFont(ofSize: 0)
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.tabStops = [NSTextTab(textAlignment: .right, location: 250)]
+        let result = NSMutableAttributedString(
+            string: title,
+            attributes: [.font: font, .paragraphStyle: paragraph]
+        )
+        result.append(NSAttributedString(
+            string: "\t" + hint,
+            attributes: [.font: font, .paragraphStyle: paragraph, .foregroundColor: NSColor.secondaryLabelColor]
+        ))
+        return result
     }
 
     private static func name(_ mode: InputMode?) -> String {
