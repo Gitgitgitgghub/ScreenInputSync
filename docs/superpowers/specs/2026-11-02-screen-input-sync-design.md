@@ -36,5 +36,5 @@ Forwarding the Caps Lock lock state also puts the remote Zhuyin into its English
 ## Constraints
 
 - macOS 14+, Swift 6, no third-party runtime dependencies.
-- Requires Accessibility and Input Monitoring permission.
+- Requires Accessibility only (active event tap + posting F17). Verified 2026-11-03 that Input Monitoring is not needed.
 - Signed with a stable Apple Development identity so permissions survive rebuilds.

@@ -1,19 +1,9 @@
 import ApplicationServices
-import CoreGraphics
 
 struct PermissionController {
+    /// The active (modifying) keyboard event tap and posting F17 both require
+    /// Accessibility; a modifying tap does not need Input Monitoring.
     func ensureKeyboardPermissions() -> Bool {
-        let accessibilityGranted = AXIsProcessTrustedWithOptions(
-            ["AXTrustedCheckOptionPrompt": true] as CFDictionary
-        )
-
-        let inputMonitoringGranted: Bool
-        if CGPreflightListenEventAccess() {
-            inputMonitoringGranted = true
-        } else {
-            inputMonitoringGranted = CGRequestListenEventAccess()
-        }
-
-        return accessibilityGranted && inputMonitoringGranted
+        AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary)
     }
 }

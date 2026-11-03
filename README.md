@@ -38,13 +38,12 @@
 ./scripts/build-and-install.sh
 ```
 
-安裝到 `/Applications/ScreenInputSync.app` 並自動註冊為登入項目（可在選單關閉「登入時啟動」）。首次開啟請在「系統設定 → 隱私權與安全性」允許**輔助使用**與**輸入監控**，再重新開啟 App。
+安裝到 `/Applications/ScreenInputSync.app` 並自動註冊為登入項目（可在選單關閉「登入時啟動」）。首次開啟請在「系統設定 → 隱私權與安全性 → 輔助使用」允許 ScreenInputSync，再重新開啟 App。這是唯一需要的權限（攔截／修改按鍵與送出 F17 都靠它），不需要「輸入監控」。
 
 安裝腳本會使用 Keychain 中的 Apple Development 憑證簽署，重建後權限會保留。若沒有憑證則改用 ad-hoc 簽署，每次重建都需要重新允許權限；若權限顯示已允許卻仍被要求，可清除舊紀錄後重新允許：
 
 ```sh
 tccutil reset Accessibility com.brant.ScreenInputSync
-tccutil reset ListenEvent com.brant.ScreenInputSync
 ```
 
 ## 解除安裝
@@ -55,4 +54,4 @@ tccutil reset ListenEvent com.brant.ScreenInputSync
 rm -rf /Applications/ScreenInputSync.app
 ```
 
-最後可在系統設定中移除它的輔助使用與輸入監控權限。
+最後可在系統設定中移除它的輔助使用權限。

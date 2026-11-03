@@ -116,7 +116,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         if PermissionController().ensureKeyboardPermissions() {
             updateKeyboardStatus(eventTap.start() ? Self.activeStatus : "無法啟動鍵盤監控，請重新開啟 App")
         } else {
-            updateKeyboardStatus("請允許「輔助使用」與「輸入監控」後重新開啟")
+            updateKeyboardStatus("請允許「輔助使用」後重新開啟")
         }
 
         if frontmostChecker.screenSharingIsFrontmost {
