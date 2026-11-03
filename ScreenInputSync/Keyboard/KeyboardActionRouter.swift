@@ -16,7 +16,7 @@ enum KeyboardEvent: Equatable, Sendable {
 enum RoutingDecision: Equatable, Sendable {
     case passThrough
     case suppress
-    case toggleRemote
+    case toggleBoth
     case showResyncHUD
     case chooseEnglish
     case chooseChinese
@@ -78,8 +78,8 @@ struct KeyboardActionRouter {
 
         switch event {
         case .capsLockPressed:
-            // Caps Lock never reaches the remote; F17 switches its input source.
-            return .toggleRemote
+            // Caps Lock never reaches the remote; both Macs are switched explicitly.
+            return .toggleBoth
         case .capsLockReleased, .lockStateChanged:
             return .suppress
         case .commandDown:

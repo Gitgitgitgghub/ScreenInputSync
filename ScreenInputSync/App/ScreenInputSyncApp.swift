@@ -27,7 +27,6 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
     private var loginItemController: LoginItemController?
     private var workspaceObserver: NSObjectProtocol?
     private var inputSourceObserver: NSObjectProtocol?
-    private var localInputGuard: LocalInputGuard?
     private var keyboardStatus = "Starting keyboard monitor…"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -96,17 +95,13 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        let inputGuard = LocalInputGuard(sourceController: sourceController, onError: { error in
-            DispatchQueue.main.async { menu.updateStatus("Error: \(error.localizedDescription)") }
-        })
-        localInputGuard = inputGuard
         inputSourceObserver = DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String),
             object: nil,
             queue: .main
         ) { _ in
             Task { @MainActor in
-                inputGuard.localSourceDidChange()
+                coordinator.localSourceDidChange()
                 if let mode = try? sourceController.currentMode() { menu.updateMode(mode) }
             }
         }
@@ -120,10 +115,10 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
                 self?.updateLoginPresentation()
                 guard !frontmostChecker.screenSharingIsFrontmost else {
                     self?.eventTapController?.clearCapsLock()
-                    inputGuard.screenSharingDidBecomeFrontmost()
+                    coordinator.screenSharingDidBecomeFrontmost()
                     return
                 }
-                inputGuard.screenSharingDidResignFrontmost()
+                coordinator.screenSharingDidResignFrontmost()
                 self?.eventTapController?.setHUDActive(false)
                 self?.hudController?.dismiss()
             }
@@ -136,7 +131,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         }
 
         if frontmostChecker.screenSharingIsFrontmost {
-            inputGuard.screenSharingDidBecomeFrontmost()
+            coordinator.screenSharingDidBecomeFrontmost()
         }
 
         do {
@@ -148,8 +143,8 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
 
     private func handle(_ decision: RoutingDecision) {
         switch decision {
-        case .toggleRemote:
-            inputSyncCoordinator?.toggleRemote()
+        case .toggleBoth:
+            inputSyncCoordinator?.toggleBoth()
         case .showResyncHUD:
             hudController?.show()
         case .chooseEnglish:

@@ -28,7 +28,7 @@ ScreenInputSync 是僅安裝在發起連線 Mac 上的 macOS 選單列工具。�
 
 ## 使用方式
 
-- **Screen Sharing 位於前景：** 本機輸入法固定為 ABC（離開時恢復原本的輸入法），讓按鍵原樣送到遠端，由遠端輸入法決定打字行為。Caps Lock 只送出 F17 切換遠端輸入法；Caps Lock 與大寫鎖定狀態都不會傳到遠端，避免遠端注音被大寫鎖定切成英文、ABC 下 Shift 出現全形字。
+- **Screen Sharing 位於前景：** Caps Lock 同時切換本機與遠端（遠端靠 F17），Caps Lock 與大寫鎖定狀態不會傳到遠端。Screen Sharing 會先用**本機**輸入法轉換按鍵再送出，所以本機必須與遠端一致：本機 ABC 時遠端注音無法組字，本機注音時遠端 ABC 會打出注音符號。進入 Screen Sharing 時本機自動切到遠端目前的輸入法，離開時恢復原本的輸入法。
 - **其他 App：** Caps Lock 維持原有行為。
 - **重新對齊：** 先按住 Command，再按 Shift；期間不要按其他鍵，最後放開兩鍵。
   - 按 `E`：遠端目前是 ABC，將本機對齊英文。

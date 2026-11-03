@@ -11,11 +11,11 @@ final class KeyboardActionRouterTests: XCTestCase {
     func testCapsLockNeverReachesRemoteAndTogglesItOncePerPress() {
         var router = KeyboardActionRouter()
         let press = router.route(.capsLockPressed, screenSharingIsFrontmost: true)
-        XCTAssertEqual(press, .toggleRemote)
+        XCTAssertEqual(press, .toggleBoth)
         XCTAssertTrue(press.suppressesEvent, "Caps Lock state must not reach the remote")
         XCTAssertEqual(router.route(.lockStateChanged, screenSharingIsFrontmost: true), .suppress)
         XCTAssertEqual(router.route(.capsLockReleased, screenSharingIsFrontmost: true), .suppress)
-        XCTAssertEqual(router.route(.capsLockPressed, screenSharingIsFrontmost: true), .toggleRemote)
+        XCTAssertEqual(router.route(.capsLockPressed, screenSharingIsFrontmost: true), .toggleBoth)
     }
 
     func testLockStateChangesPassThroughOutsideScreenSharing() {
