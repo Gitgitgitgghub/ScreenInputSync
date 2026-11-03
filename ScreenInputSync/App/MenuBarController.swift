@@ -33,12 +33,17 @@ final class MenuBarController: NSObject {
         )
         resyncItem.target = self
         resyncItem.attributedTitle = Self.titleWithHint("對齊遠端輸入法…", hint: "⌘⇧")
-        resyncItem.toolTip = "在螢幕共享中同時按下 ⌘ 和 ⇧，再放開（中間不要按其他鍵）"
+        resyncItem.toolTip = "僅限螢幕共享位於前景時使用。快捷鍵：在螢幕共享中同時按下 ⌘ 和 ⇧ 再放開（中間不要按其他鍵）"
         loginMenuItem.target = self
         menu.addItem(loginMenuItem)
         loginStatusMenuItem.isEnabled = false
         loginStatusMenuItem.isHidden = true
         menu.addItem(loginStatusMenuItem)
+        menu.addItem(
+            withTitle: "開啟輔助使用權限設定…",
+            action: #selector(openAccessibilitySettings),
+            keyEquivalent: ""
+        ).target = self
         menu.addItem(.separator())
         menu.addItem(
             withTitle: "結束 \(AppMetadata.displayName)",
@@ -92,6 +97,11 @@ final class MenuBarController: NSObject {
 
     @objc private func toggleLoginItem() {
         onLaunchAtLoginSelected?()
+    }
+
+    @objc private func openAccessibilitySettings() {
+        let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
+        NSWorkspace.shared.open(url)
     }
 
     @objc private func quit() {

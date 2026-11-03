@@ -73,7 +73,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
 
         menu.onResync = { [weak eventTap, weak hud] in
             guard frontmostChecker.screenSharingIsFrontmost else {
-                menu.updateStatus("請先切到螢幕共享視窗再對齊")
+                hud?.showScreenSharingRequired()
                 return
             }
             eventTap?.setHUDActive(true)

@@ -9,6 +9,7 @@ final class ResyncHUDController {
     private let choiceView: NSView
     private let confirmationView: NSView
     private let confirmationLabel: NSTextField
+    private let statusIcon: NSImageView
     private var dismissWorkItem: DispatchWorkItem?
 
     init() {
@@ -64,14 +65,10 @@ final class ResyncHUDController {
         options.translatesAutoresizingMaskIntoConstraints = false
         choiceView = choice
 
-        let check = NSImageView(image: NSImage(
-            systemSymbolName: "checkmark.circle.fill",
-            accessibilityDescription: nil
-        ) ?? NSImage())
-        check.symbolConfiguration = .init(pointSize: 44, weight: .medium)
-        check.contentTintColor = .systemGreen
+        statusIcon = NSImageView()
+        statusIcon.symbolConfiguration = .init(pointSize: 44, weight: .medium)
         confirmationLabel = Self.label("", size: 17, weight: .semibold)
-        let confirmation = NSStackView(views: [check, confirmationLabel])
+        let confirmation = NSStackView(views: [statusIcon, confirmationLabel])
         confirmation.orientation = .vertical
         confirmation.alignment = .centerX
         confirmation.spacing = 12
@@ -98,15 +95,37 @@ final class ResyncHUDController {
     }
 
     func showConfirmation(_ mode: InputMode) {
+        showMessage(
+            mode == .english ? "已對齊：本機切為 ABC" : "已對齊：本機切為注音",
+            symbol: "checkmark.circle.fill",
+            tint: .systemGreen,
+            duration: 1.0
+        )
+    }
+
+    /// Shown when resync is requested outside Screen Sharing, so the request
+    /// does not look like it was ignored.
+    func showScreenSharingRequired() {
+        showMessage(
+            "請先切到螢幕共享視窗",
+            symbol: "rectangle.on.rectangle",
+            tint: .systemOrange,
+            duration: 1.6
+        )
+    }
+
+    private func showMessage(_ text: String, symbol: String, tint: NSColor, duration: TimeInterval) {
         dismissWorkItem?.cancel()
-        confirmationLabel.stringValue = mode == .english ? "已對齊：本機切為 ABC" : "已對齊：本機切為注音"
+        statusIcon.image = NSImage(systemSymbolName: symbol, accessibilityDescription: nil)
+        statusIcon.contentTintColor = tint
+        confirmationLabel.stringValue = text
         choiceView.isHidden = true
         confirmationView.isHidden = false
         present()
 
         let item = DispatchWorkItem { [weak self] in self?.dismiss() }
         dismissWorkItem = item
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: item)
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: item)
     }
 
     func dismiss() {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		03A8E105337F1DD6F1F1CD5A /* ResyncHUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1359ED5CCB168B99B555C318 /* ResyncHUDController.swift */; };
 		07710BB264822DF57B40786B /* CarbonInputSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09CC544810AADF44AC6AD6E0 /* CarbonInputSourceController.swift */; };
+		2A6A41299FE8A09274E1AE96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00A0B75B64348BD1465A8163 /* Assets.xcassets */; };
 		30BD95FF3B44700D9B546A9B /* InputMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CBF3BC4B41462BD7DA965 /* InputMode.swift */; };
 		31B56E1D2189E1ACF400318F /* FrontmostApplicationChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB007A5937504DDB1DC8BFD /* FrontmostApplicationChecking.swift */; };
 		339B69507B9E5859487079FE /* ModifierChordRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255E3F85D7DA29D78937CA0 /* ModifierChordRecognizer.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00A0B75B64348BD1465A8163 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		09CC544810AADF44AC6AD6E0 /* CarbonInputSourceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbonInputSourceController.swift; sourceTree = "<group>"; };
 		1255E3F85D7DA29D78937CA0 /* ModifierChordRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierChordRecognizer.swift; sourceTree = "<group>"; };
 		1359ED5CCB168B99B555C318 /* ResyncHUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResyncHUDController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		699AA72CF0850A3160199D7B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00A0B75B64348BD1465A8163 /* Assets.xcassets */,
 				18DD5A06FA9701527654995E /* Info.plist */,
 			);
 			path = Resources;
@@ -199,6 +202,7 @@
 			buildConfigurationList = B22B0E2E8F7BA765BDE8746C /* Build configuration list for PBXNativeTarget "ScreenInputSync" */;
 			buildPhases = (
 				E9380447C9FCC3F26F70E040 /* Sources */,
+				E87883E71F5B37FBABFC0B03 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -262,6 +266,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E87883E71F5B37FBABFC0B03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A6A41299FE8A09274E1AE96 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		25CD72C76B9B1E7A8AAD5DA8 /* Sources */ = {
