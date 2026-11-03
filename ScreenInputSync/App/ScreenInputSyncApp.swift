@@ -1,4 +1,5 @@
 import AppKit
+import Carbon.HIToolbox
 
 enum AppMetadata {
     static let displayName = "ScreenInputSync"
@@ -25,6 +26,8 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
     private var hudController: ResyncHUDController?
     private var loginItemController: LoginItemController?
     private var workspaceObserver: NSObjectProtocol?
+    private var inputSourceObserver: NSObjectProtocol?
+    private var localInputGuard: LocalInputGuard?
     private var keyboardStatus = "Starting keyboard monitor…"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -93,6 +96,21 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+        let inputGuard = LocalInputGuard(sourceController: sourceController, onError: { error in
+            DispatchQueue.main.async { menu.updateStatus("Error: \(error.localizedDescription)") }
+        })
+        localInputGuard = inputGuard
+        inputSourceObserver = DistributedNotificationCenter.default().addObserver(
+            forName: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String),
+            object: nil,
+            queue: .main
+        ) { _ in
+            Task { @MainActor in
+                inputGuard.localSourceDidChange()
+                if let mode = try? sourceController.currentMode() { menu.updateMode(mode) }
+            }
+        }
+
         workspaceObserver = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification,
             object: nil,
@@ -102,8 +120,10 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
                 self?.updateLoginPresentation()
                 guard !frontmostChecker.screenSharingIsFrontmost else {
                     self?.eventTapController?.clearCapsLock()
+                    inputGuard.screenSharingDidBecomeFrontmost()
                     return
                 }
+                inputGuard.screenSharingDidResignFrontmost()
                 self?.eventTapController?.setHUDActive(false)
                 self?.hudController?.dismiss()
             }
@@ -113,6 +133,10 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             updateKeyboardStatus(eventTap.start() ? "Active in Screen Sharing" : "Unable to start keyboard monitor")
         } else {
             updateKeyboardStatus("Grant Accessibility and Input Monitoring, then relaunch")
+        }
+
+        if frontmostChecker.screenSharingIsFrontmost {
+            inputGuard.screenSharingDidBecomeFrontmost()
         }
 
         do {
