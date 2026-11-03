@@ -42,24 +42,24 @@
 **Interfaces:**
 - Produces: `ScreenInputSyncAppDelegate`, `MenuBarController`, and a generated `ScreenInputSync.xcodeproj` with app and unit-test targets.
 
-- [ ] **Step 1: Write the failing smoke test**
+- [x] **Step 1: Write the failing smoke test**
 
 Add `SmokeTests.testApplicationName()` asserting `AppMetadata.displayName == "ScreenInputSync"` before `AppMetadata` exists.
 
-- [ ] **Step 2: Generate the project and verify RED**
+- [x] **Step 2: Generate the project and verify RED**
 
 Run: `xcodegen generate && xcodebuild test -project ScreenInputSync.xcodeproj -scheme ScreenInputSync -destination 'platform=macOS' -only-testing:ScreenInputSyncTests/SmokeTests`
 Expected: FAIL because `AppMetadata` is undefined.
 
-- [ ] **Step 3: Implement the minimal app shell**
+- [x] **Step 3: Implement the minimal app shell**
 
 Create `enum AppMetadata { static let displayName = "ScreenInputSync" }`, an `NSApplicationDelegate` entry point, and an `NSStatusItem` menu with disabled status text and Quit. Set `LSUIElement` to true in `Info.plist`.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN**
 
 Run the Task 1 test command; expected PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Commit message: `feat: scaffold ScreenInputSync menu bar app`
 
@@ -73,24 +73,24 @@ Commit message: `feat: scaffold ScreenInputSync menu bar app`
 - Produces: `struct ModifierSequenceRecognizer` with `mutating func handle(_ event: ModifierSequenceEvent) -> ModifierSequenceResult`.
 - Produces: `ModifierSequenceEvent` cases for commandDown, shiftDown, commandUp, shiftUp, otherKeyDown, and reset; result cases ignored, pending, triggered, and cancelled.
 
-- [ ] **Step 1: Write failing sequence tests**
+- [x] **Step 1: Write failing sequence tests**
 
 Test Command-down → Shift-down → releases triggers only after both release; Shift-first is ignored; any other key cancels; Command-Shift-P never triggers; reset clears pending state.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 Run: `xcodebuild test -project ScreenInputSync.xcodeproj -scheme ScreenInputSync -destination 'platform=macOS' -only-testing:ScreenInputSyncTests/ModifierSequenceRecognizerTests`
 Expected: FAIL because recognizer types do not exist.
 
-- [ ] **Step 3: Implement the state machine**
+- [x] **Step 3: Implement the state machine**
 
 Implement `ModifierSequenceRecognizer` as a value type with private explicit states; do not use timers or AppKit.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN**
 
 Run the Task 2 test command; expected all sequence tests PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Commit message: `feat: recognize ordered modifier resync gesture`
 
@@ -107,23 +107,23 @@ Commit message: `feat: recognize ordered modifier resync gesture`
 - Produces: `protocol RemoteToggleEmitting` with `emitRemoteToggle()`.
 - Produces: `InputSyncCoordinator.toggleBoth()` and `InputSyncCoordinator.alignLocal(to:)`.
 
-- [ ] **Step 1: Write failing coordinator tests**
+- [x] **Step 1: Write failing coordinator tests**
 
 Assert `toggleBoth()` selects the opposite local mode then emits exactly one remote toggle; `alignLocal(to:)` selects the requested local mode and emits none; source errors are surfaced through `onError`.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 Run the coordinator test class; expected FAIL because domain types do not exist.
 
-- [ ] **Step 3: Implement minimal coordinator logic**
+- [x] **Step 3: Implement minimal coordinator logic**
 
 Inject `InputSourceControlling`, `RemoteToggleEmitting`, `onModeChanged`, and `onError` closures. Keep AppKit and Carbon out of this file.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN**
 
 Run the coordinator test class; expected PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Commit message: `feat: add deterministic input sync coordinator`
 
@@ -140,27 +140,27 @@ Commit message: `feat: add deterministic input sync coordinator`
 - Produces: `KeyboardActionRouter.route(_:) -> RoutingDecision` with passThrough, suppress, toggleBoth, showResyncHUD, chooseEnglish, chooseChinese, and dismissHUD decisions.
 - Produces: `EventTapController.start()`, `stop()`, and timeout re-enable handling.
 
-- [ ] **Step 1: Write failing routing tests**
+- [x] **Step 1: Write failing routing tests**
 
 Assert events pass outside Screen Sharing; Caps is suppressed and toggles inside it; the ordered modifier gesture is suppressed only once recognized; E/C/Escape are captured only while HUD is active; ordinary Command-Shift-letter shortcuts pass through; timeout resets state and requests tap re-enable.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 Run the router test class; expected FAIL because router types do not exist.
 
-- [ ] **Step 3: Implement the pure router**
+- [x] **Step 3: Implement the pure router**
 
 Inject a frontmost-app boolean into each route call and expose explicit HUD-active state.
 
-- [ ] **Step 4: Implement the CGEvent adapter**
+- [x] **Step 4: Implement the CGEvent adapter**
 
 Map `flagsChanged`, keyDown, Caps Lock, E, C, and Escape into router events. Suppress only decisions that require suppression and re-enable the event tap after timeout/user disable callbacks.
 
-- [ ] **Step 5: Verify GREEN**
+- [x] **Step 5: Verify GREEN**
 
 Run the router test class and full test suite; expected PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 Commit message: `feat: route Screen Sharing keyboard events`
 
@@ -177,27 +177,27 @@ Commit message: `feat: route Screen Sharing keyboard events`
 - Produces: `F17RemoteToggleEmitter: RemoteToggleEmitting`.
 - Produces: pure `InputSourceDescriptorMatcher.mode(for:)` used by unit tests.
 
-- [ ] **Step 1: Write failing descriptor matching tests**
+- [x] **Step 1: Write failing descriptor matching tests**
 
 Cover ABC ID, Traditional Zhuyin input-mode ID, unrelated sources, and missing configured sources. Assert missing sources yield a descriptive error.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 Run the matching test class; expected FAIL because matcher does not exist.
 
-- [ ] **Step 3: Implement Carbon source lookup and selection**
+- [x] **Step 3: Implement Carbon source lookup and selection**
 
 Use `TISCopyCurrentKeyboardInputSource`, `TISCreateInputSourceList`, and `TISSelectInputSource`. Match `com.apple.keylayout.ABC` and `com.apple.inputmethod.TCIM.Zhuyin` with a documented fallback for the enabled Traditional Zhuyin descriptor.
 
-- [ ] **Step 4: Implement F17 emission**
+- [x] **Step 4: Implement F17 emission**
 
 Post F17 key-down and key-up `CGEvent`s to the active session without modifiers.
 
-- [ ] **Step 5: Verify GREEN**
+- [x] **Step 5: Verify GREEN**
 
 Run matching tests and full suite; expected PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 Commit message: `feat: control local sources and emit remote toggle`
 
@@ -214,31 +214,31 @@ Commit message: `feat: control local sources and emit remote toggle`
 - Produces: `PermissionController.ensureAccessibilityPermission()`.
 - Produces: `protocol LoginItemServicing` and `LoginItemController.enableIfNeeded()` backed by `SMAppService.mainApp`.
 
-- [ ] **Step 1: Write failing login-item tests**
+- [x] **Step 1: Write failing login-item tests**
 
 Assert first launch registers when not registered, does nothing when enabled, and surfaces registration failure in menu status.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 Run the login-item test class; expected FAIL because controller types do not exist.
 
-- [ ] **Step 3: Implement login registration and permissions prompt**
+- [x] **Step 3: Implement login registration and permissions prompt**
 
 Wrap `SMAppService.mainApp`; prompt through `AXIsProcessTrustedWithOptions` and expose missing-permission status.
 
-- [ ] **Step 4: Implement the HUD**
+- [x] **Step 4: Implement the HUD**
 
 Use a nonactivating centered `NSPanel` showing `E  English`, `C  中文`, and `Esc  Cancel`; confirmation auto-dismisses after a short delay.
 
-- [ ] **Step 5: Wire menu, coordinator, event tap, and HUD in the app delegate**
+- [x] **Step 5: Wire menu, coordinator, event tap, and HUD in the app delegate**
 
 Menu items: current mode/status, Resync, Launch at Login toggle, Quit. Start the event tap only after permission is available.
 
-- [ ] **Step 6: Verify GREEN**
+- [x] **Step 6: Verify GREEN**
 
 Run login tests and full suite; expected PASS.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 Commit message: `feat: add resync HUD and login startup`
 
@@ -251,11 +251,11 @@ Commit message: `feat: add resync HUD and login startup`
 **Interfaces:**
 - Produces: a signed local build installed at `/Applications/ScreenInputSync.app` and documented setup/removal steps.
 
-- [ ] **Step 1: Write the installation script checks**
+- [x] **Step 1: Write the installation script checks**
 
 Build Release with `xcodebuild`, copy the app to `/Applications`, ad-hoc sign when no development identity is configured, and relaunch it. Fail on any command error.
 
-- [ ] **Step 2: Build and run all automated verification**
+- [x] **Step 2: Build and run all automated verification**
 
 Run: `xcodebuild test -project ScreenInputSync.xcodeproj -scheme ScreenInputSync -destination 'platform=macOS'`
 Expected: all tests PASS with zero failures.
@@ -268,10 +268,10 @@ Verify permission prompt, automatic login registration, Caps outside Screen Shar
 
 Back up then remove `Screen Sharing: Caps Lock to F18` from `~/.config/karabiner/karabiner.json`; remove local F18 shortcut; retain remote F17.
 
-- [ ] **Step 5: Document operations and rollback**
+- [x] **Step 5: Document operations and rollback**
 
 README must explain remote F17 setup, permissions, resync semantics, launch-at-login behavior, uninstall, and restoring the Karabiner backup.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 Commit message: `docs: add installation and migration guide`

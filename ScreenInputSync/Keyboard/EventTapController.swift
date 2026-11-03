@@ -5,13 +5,16 @@ final class EventTapController: @unchecked Sendable {
     private var runLoopSource: CFRunLoopSource?
     private var router = KeyboardActionRouter()
     private let frontmostChecker: FrontmostApplicationChecking
+    private let capsLockState: CapsLockStateResetting
     private let onDecision: (RoutingDecision) -> Void
 
     init(
         frontmostChecker: FrontmostApplicationChecking,
+        capsLockState: CapsLockStateResetting = HIDCapsLockStateController(),
         onDecision: @escaping (RoutingDecision) -> Void
     ) {
         self.frontmostChecker = frontmostChecker
+        self.capsLockState = capsLockState
         self.onDecision = onDecision
     }
 
@@ -83,6 +86,7 @@ final class EventTapController: @unchecked Sendable {
             keyboardEvent,
             screenSharingIsFrontmost: frontmostChecker.screenSharingIsFrontmost
         )
+        if decision == .toggleBoth { capsLockState.clearCapsLock() }
         if decision != .passThrough { onDecision(decision) }
         return decision.suppressesEvent ? nil : Unmanaged.passUnretained(event)
     }
