@@ -5,13 +5,16 @@ final class EventTapController: @unchecked Sendable {
     private var runLoopSource: CFRunLoopSource?
     private var router = KeyboardActionRouter()
     private let frontmostChecker: FrontmostApplicationChecking
+    private let capsLockState: CapsLockStateResetting
     private let onDecision: (RoutingDecision) -> Void
 
     init(
         frontmostChecker: FrontmostApplicationChecking,
+        capsLockState: CapsLockStateResetting = HIDCapsLockStateController(),
         onDecision: @escaping (RoutingDecision) -> Void
     ) {
         self.frontmostChecker = frontmostChecker
+        self.capsLockState = capsLockState
         self.onDecision = onDecision
     }
 
@@ -54,6 +57,11 @@ final class EventTapController: @unchecked Sendable {
         router.setHUDActive(false)
     }
 
+    /// Keeps the local Caps Lock latch off so no lock state leaks to the remote.
+    func clearCapsLock() {
+        capsLockState.clearCapsLock()
+    }
+
     func setHUDActive(_ active: Bool) {
         router.setHUDActive(active)
     }
@@ -75,15 +83,25 @@ final class EventTapController: @unchecked Sendable {
             return Unmanaged.passUnretained(event)
         }
 
-        guard let keyboardEvent = keyboardEvent(type: type, event: event) else {
+        let screenSharingIsFrontmost = frontmostChecker.screenSharingIsFrontmost
+        let keyboardEvent = keyboardEvent(type: type, event: event)
+        if screenSharingIsFrontmost {
+            // Never forward a Caps Lock state to the remote: its Zhuyin input
+            // method treats Caps Lock as "type English", which desyncs the
+            // remote's behavior from its displayed input source.
+            event.flags.remove(.maskAlphaShift)
+        }
+
+        guard let keyboardEvent else {
             return Unmanaged.passUnretained(event)
         }
 
-        let decision = router.route(
-            keyboardEvent,
-            screenSharingIsFrontmost: frontmostChecker.screenSharingIsFrontmost
-        )
-        if decision != .passThrough { onDecision(decision) }
+        let decision = router.route(keyboardEvent, screenSharingIsFrontmost: screenSharingIsFrontmost)
+        if screenSharingIsFrontmost, decision.suppressesEvent,
+           [.capsLockPressed, .capsLockReleased, .lockStateChanged].contains(keyboardEvent) {
+            capsLockState.clearCapsLock()
+        }
+        if decision != .passThrough, decision != .suppress { onDecision(decision) }
         return decision.suppressesEvent ? nil : Unmanaged.passUnretained(event)
     }
 
@@ -108,6 +126,9 @@ enum KeyboardEventAdapter {
                 return flags.contains(.maskCommand) ? .commandDown : .commandUp
             case 56, 60:
                 return flags.contains(.maskShift) ? .shiftDown : .shiftUp
+            case 255:
+                // Synthetic lock-state change (system or IOHIDSetModifierLockState).
+                return .lockStateChanged
             case 57:
                 // With macOS "Use Caps Lock to switch to and from ABC", a tap
                 // emits flagsChanged on press (latch on) and on release (latch

@@ -16,8 +16,7 @@ final class InputSyncCoordinator {
         self.onError = onError
     }
 
-    /// The local Mac switches itself via the system Caps Lock setting; this
-    /// only asks the remote Mac to follow by sending its F17 shortcut.
+    /// Switches only the remote Mac's input source via its F17 shortcut.
     func toggleRemote() {
         remoteEmitter.emitRemoteToggle()
     }

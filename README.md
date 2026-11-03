@@ -8,7 +8,6 @@ ScreenInputSync 是僅安裝在發起連線 Mac 上的 macOS 選單列工具。�
 - Apple Screen Sharing（bundle ID：`com.apple.ScreenSharing`）
 - 本機已啟用 ABC 與「繁體中文－注音」
 - 遠端把 F17 設為「選取上一個輸入方式」，且切換循環只有預期的 ABC／注音
-- 本機開啟「系統設定 → 鍵盤 → 輸入方式 → 使用大寫鎖定鍵切換『ABC』輸入方式」；本機的切換完全交給系統
 - 開發建置需要 Xcode 及 XcodeGen：`brew install xcodegen`
 
 ## 建置與安裝
@@ -29,7 +28,7 @@ ScreenInputSync 是僅安裝在發起連線 Mac 上的 macOS 選單列工具。�
 
 ## 使用方式
 
-- **Screen Sharing 位於前景：** Caps Lock 照常由系統切換本機 ABC／注音，工具另外送出 F17 讓遠端跟著切換。
+- **Screen Sharing 位於前景：** Caps Lock 只送出 F17 切換遠端輸入法；Caps Lock 與大寫鎖定狀態都不會傳到遠端，避免遠端注音被大寫鎖定切成英文、ABC 下 Shift 出現全形字。
 - **其他 App：** Caps Lock 維持原有行為。
 - **重新對齊：** 先按住 Command，再按 Shift；期間不要按其他鍵，最後放開兩鍵。
   - 按 `E`：遠端目前是 ABC，將本機對齊英文。
