@@ -48,9 +48,23 @@ ScreenInputSync 的解法：
 
 ## 安裝
 
-到 [Releases](https://github.com/Gitgitgitgghub/ScreenInputSync/releases/latest) 下載 `ScreenInputSync-x.y.zip`，解壓縮後把 App 拖進「應用程式」資料夾。Intel 與 Apple 晶片的 Mac 都適用。
+各版本的變更見 [CHANGELOG](CHANGELOG.md)。Intel 與 Apple 晶片的 Mac 都適用。
 
-App 未經 Apple 公證，第一次打開會被擋下。請到「系統設定 → 隱私權與安全性」，在下方找到 ScreenInputSync 並按「仍要打開」，之後就不會再出現。接著依提示允許「輔助使用」權限（見下方「權限」）。
+1. 到 [Releases](https://github.com/Gitgitgitgghub/ScreenInputSync/releases/latest) 下載 `ScreenInputSync-x.y.zip`，點兩下解壓縮。
+2. 把 `ScreenInputSync.app` 拖進「應用程式」資料夾，再從那裡開啟。若直接在「下載」資料夾開啟，App 會提示並自動移到「應用程式」。
+3. App 未經 Apple 公證，第一次開啟會出現下面的視窗。按 **「完成」**（不要按「丟到垃圾桶」）。
+
+   <img src="docs/images/gatekeeper-blocked.png" alt="未打開「ScreenInputSync」的提示視窗" width="276">
+
+4. 打開「系統設定 → 隱私權與安全性」，捲到最下面的「安全性」，按 ScreenInputSync 旁的 **「強制打開」**，並輸入密碼或用 Touch ID 確認。
+
+   <img src="docs/images/gatekeeper-open-anyway.png" alt="隱私權與安全性中的「強制打開」按鈕" width="450">
+
+   找不到這個按鈕時，再開啟一次 App 讓它被擋下，然後馬上回到這個頁面。
+
+5. 再開啟一次 App，在跳出的視窗中確認開啟。之後就不會再被擋。
+6. 依提示到「輔助使用」允許 ScreenInputSync（見下方「權限」），然後重新開啟 App。選單列出現鍵盤圖示即完成。
+7. 遠端 Mac 照下方「遠端 Mac 設定」設定一次。
 
 ## 遠端 Mac 設定
 
@@ -85,3 +99,14 @@ rm -rf /Applications/ScreenInputSync.app
 ```
 
 最後可在系統設定中移除它的輔助使用權限。
+
+## 發佈新版本
+
+1. 修改 `ScreenInputSync/Resources/Info.plist` 的 `CFBundleShortVersionString`（顯示版本，如 `1.2`）並把 `CFBundleVersion` 加 1。
+2. 在 `CHANGELOG.md` 最上方新增這個版本的變更。
+3. 用同一張簽署憑證編譯 Release（換憑證會讓使用者的輔助使用權限失效），把 App 壓成 `ScreenInputSync-1.2.zip`。
+4. commit 後建立 Release，標籤為 `v1.2`：
+
+   ```sh
+   gh release create v1.2 ScreenInputSync-1.2.zip --title "ScreenInputSync 1.2" --notes "…"
+   ```

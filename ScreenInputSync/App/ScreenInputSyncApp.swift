@@ -3,6 +3,7 @@ import Carbon.HIToolbox
 
 enum AppMetadata {
     static let displayName = "ScreenInputSync"
+    static let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
 }
 
 @main
@@ -33,6 +34,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else {
             return
         }
+        if ApplicationMover.moveToApplicationsIfTranslocated() { return }
 
         let menu = MenuBarController()
         menuBarController = menu

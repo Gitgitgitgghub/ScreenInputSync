@@ -45,6 +45,9 @@ final class MenuBarController: NSObject {
             keyEquivalent: ""
         ).target = self
         menu.addItem(.separator())
+        let versionItem = NSMenuItem(title: "版本 \(AppMetadata.version)", action: nil, keyEquivalent: "")
+        versionItem.isEnabled = false
+        menu.addItem(versionItem)
         menu.addItem(
             withTitle: "結束 \(AppMetadata.displayName)",
             action: #selector(quit),
