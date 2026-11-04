@@ -52,7 +52,7 @@ ScreenInputSync 的解法：
 
 1. 到 [Releases](https://github.com/Gitgitgitgghub/ScreenInputSync/releases/latest) 下載 `ScreenInputSync-x.y.zip`，點兩下解壓縮。
 2. 把 `ScreenInputSync.app` 拖進「應用程式」資料夾，再從那裡開啟。若直接在「下載」資料夾開啟，App 會提示並自動移到「應用程式」。
-3. App 未經 Apple 公證，第一次開啟會出現下面的視窗。按 **「完成」**（不要按「丟到垃圾桶」）。
+3. App 未經 Apple 公證，第一次開啟會出現下面的視窗。按 **「完成」**，**不要按「丟到垃圾桶」**。
 
    <img src="docs/images/gatekeeper-blocked.png" alt="未打開「ScreenInputSync」的提示視窗" width="276">
 
@@ -74,9 +74,17 @@ ScreenInputSync 的解法：
 
    ![遠端鍵盤設定：輸入方式為 ABC 和繁體注音](docs/images/remote-input-sources.png)
 
-2. **把 F17 設為「選擇上一個輸入方式」**：按「鍵盤快速鍵…」→ 左側選「輸入方式」→ 勾選「選擇上一個輸入方式」，點兩下右側的快捷鍵後按 F17。若鍵盤沒有 F17，可在本機裝好 ScreenInputSync 後，透過螢幕共享在該欄位按一次 Caps Lock，工具送出的 F17 就會被錄進去（已實測）。錄製時本機輸入法會跟著切換一次，但遠端不會，若之後兩邊相反，用 ⌘⇧ 對齊即可。
+2. **設定 F17 快捷鍵**（ScreenInputSync 用 F17 通知遠端切換輸入法）：
+   1. 在遠端的「系統設定 → 鍵盤」按「鍵盤快速鍵…」。
+   2. 左側選「輸入方式」。
+   3. 勾選「選擇上一個輸入方式」。
+   4. 在它右邊的快捷鍵上點兩下，進入錄製狀態後按 F17。
+      - **鍵盤沒有 F17**（大部分 Mac 鍵盤都沒有）：先在本機裝好並開啟 ScreenInputSync，從本機透過螢幕共享操作遠端，點兩下該欄位後按 **Caps Lock**。ScreenInputSync 會把它轉成 F17 送到遠端，就會錄成 F17。
+   5. 右邊顯示「F17」後，按「完成」。
 
-   ![遠端鍵盤快速鍵：選擇上一個輸入方式設為 F17](docs/images/remote-f17-shortcut.png)
+   ![遠端鍵盤快速鍵：左側選輸入方式，勾選選擇上一個輸入方式並設為 F17，再按完成](docs/images/remote-f17-shortcut.png)
+
+   用 Caps Lock 錄製時，本機輸入法會跟著切換一次，但遠端不會。如果之後兩邊輸入法相反，在螢幕共享裡按一次 `⌘⇧` 校正即可。
 
 ## 權限
 
