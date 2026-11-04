@@ -69,6 +69,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
         ) { [weak self] decision in
             DispatchQueue.main.async { self?.handle(decision) }
         }
+        eventTap.inputSwitchShortcuts = SystemInputSwitchShortcuts.load()
         eventTapController = eventTap
 
         menu.onResync = { [weak eventTap, weak hud] in
@@ -83,7 +84,7 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             loginController?.handleMenuSelection()
             self?.updateLoginPresentation()
         }
-        menu.onMenuWillOpen = { [weak self, weak menu] in
+        menu.onMenuWillOpen = { [weak self] in
             self?.updateLoginPresentation()
         }
 
@@ -103,6 +104,8 @@ final class ScreenInputSyncAppDelegate: NSObject, NSApplicationDelegate {
             Task { @MainActor [weak self] in
                 self?.updateLoginPresentation()
                 guard !frontmostChecker.screenSharingIsFrontmost else {
+                    // Pick up shortcut changes made in System Settings.
+                    self?.eventTapController?.inputSwitchShortcuts = SystemInputSwitchShortcuts.load()
                     self?.eventTapController?.clearCapsLock()
                     coordinator.screenSharingDidBecomeFrontmost()
                     return

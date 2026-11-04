@@ -6,6 +6,12 @@ enum KeyboardEvent: Equatable, Sendable {
     case capsLockPressed
     case capsLockReleased
     case lockStateChanged
+    /// The user's own input-switch shortcut (e.g. Control-Space). When
+    /// modifiers are held, the switch waits until they are released so the
+    /// remote receives a bare F17 instead of, say, Control-F17.
+    case inputSwitchShortcutPressed(modifiersHeld: Bool)
+    case inputSwitchShortcutRepeated
+    case inputSwitchShortcutKeyUp
     case englishKeyDown
     case chineseKeyDown
     case escapeKeyDown
@@ -37,6 +43,8 @@ enum RoutingDecision: Equatable, Sendable {
 struct KeyboardActionRouter {
     private var recognizer = ModifierChordRecognizer()
     private var hudIsActive = false
+    private var pendingShortcutToggles = 0
+    private var shortcutKeyIsDown = false
 
     mutating func setHUDActive(_ active: Bool) {
         hudIsActive = active
@@ -50,6 +58,7 @@ struct KeyboardActionRouter {
         if event == .tapDisabled {
             _ = recognizer.handle(.reset)
             hudIsActive = false
+            resetShortcutState()
             return .reenableTap
         }
 
@@ -57,6 +66,7 @@ struct KeyboardActionRouter {
             let shouldDismissHUD = hudIsActive
             _ = recognizer.handle(.reset)
             hudIsActive = false
+            resetShortcutState()
             return shouldDismissHUD ? .dismissHUDPassingThrough : .passThrough
         }
 
@@ -82,6 +92,19 @@ struct KeyboardActionRouter {
             return .toggleBoth
         case .capsLockReleased, .lockStateChanged:
             return .suppress
+        case .inputSwitchShortcutPressed(let modifiersHeld):
+            // The shortcut never reaches the local system or the remote.
+            _ = recognizer.handle(.otherKeyDown)
+            shortcutKeyIsDown = true
+            guard modifiersHeld else { return .toggleBoth }
+            pendingShortcutToggles += 1
+            return .suppress
+        case .inputSwitchShortcutRepeated:
+            return shortcutKeyIsDown ? .suppress : .passThrough
+        case .inputSwitchShortcutKeyUp:
+            guard shortcutKeyIsDown else { return .passThrough }
+            shortcutKeyIsDown = false
+            return .suppress
         case .commandDown:
             return chordDecision(.commandDown)
         case .commandUp:
@@ -96,6 +119,20 @@ struct KeyboardActionRouter {
         case .tapDisabled:
             return .reenableTap
         }
+    }
+
+    /// Called when every modifier key is up. Applies the switches requested
+    /// with the input-switch shortcut while modifiers were held; pressing it
+    /// twice before releasing cancels out, like the system shortcut.
+    mutating func modifiersReleased(screenSharingIsFrontmost: Bool) -> RoutingDecision {
+        defer { pendingShortcutToggles = 0 }
+        guard screenSharingIsFrontmost, pendingShortcutToggles % 2 == 1 else { return .passThrough }
+        return .toggleBoth
+    }
+
+    private mutating func resetShortcutState() {
+        pendingShortcutToggles = 0
+        shortcutKeyIsDown = false
     }
 
     private mutating func chordDecision(_ event: ModifierChordEvent) -> RoutingDecision {

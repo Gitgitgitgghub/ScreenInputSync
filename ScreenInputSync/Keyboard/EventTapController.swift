@@ -7,6 +7,8 @@ final class EventTapController: @unchecked Sendable {
     private let frontmostChecker: FrontmostApplicationChecking
     private let capsLockState: CapsLockStateResetting
     private let onDecision: (RoutingDecision) -> Void
+    /// Set on the main thread, which also runs the tap callback.
+    var inputSwitchShortcuts: [InputSwitchShortcut] = []
 
     init(
         frontmostChecker: FrontmostApplicationChecking,
@@ -80,6 +82,14 @@ final class EventTapController: @unchecked Sendable {
             event.flags.remove(.maskAlphaShift)
         }
 
+        // Checked for every modifier, including Control and Option, which
+        // are not mapped to keyboard events.
+        if type == .flagsChanged,
+           event.flags.intersection(KeyboardEventAdapter.heldModifiers).isEmpty,
+           router.modifiersReleased(screenSharingIsFrontmost: screenSharingIsFrontmost) == .toggleBoth {
+            onDecision(.toggleBoth)
+        }
+
         guard let keyboardEvent else {
             return Unmanaged.passUnretained(event)
         }
@@ -97,16 +107,22 @@ final class EventTapController: @unchecked Sendable {
         KeyboardEventAdapter.map(
             type: type,
             keyCode: event.getIntegerValueField(.keyboardEventKeycode),
-            flags: event.flags
+            flags: event.flags,
+            isAutorepeat: event.getIntegerValueField(.keyboardEventAutorepeat) != 0,
+            shortcuts: inputSwitchShortcuts
         )
     }
 }
 
 enum KeyboardEventAdapter {
+    static let heldModifiers: CGEventFlags = [.maskShift, .maskControl, .maskAlternate, .maskCommand]
+
     static func map(
         type: CGEventType,
         keyCode: Int64,
-        flags: CGEventFlags
+        flags: CGEventFlags,
+        isAutorepeat: Bool = false,
+        shortcuts: [InputSwitchShortcut] = []
     ) -> KeyboardEvent? {
         if type == .flagsChanged {
             switch keyCode {
@@ -127,7 +143,15 @@ enum KeyboardEventAdapter {
             }
         }
 
+        if type == .keyUp {
+            return shortcuts.contains { $0.keyCode == keyCode } ? .inputSwitchShortcutKeyUp : nil
+        }
         guard type == .keyDown else { return nil }
+        if shortcuts.contains(where: { $0.matches(keyCode: keyCode, flags: flags) }) {
+            return isAutorepeat
+                ? .inputSwitchShortcutRepeated
+                : .inputSwitchShortcutPressed(modifiersHeld: !flags.intersection(heldModifiers).isEmpty)
+        }
         switch keyCode {
         case 14: return .englishKeyDown
         case 8: return .chineseKeyDown
