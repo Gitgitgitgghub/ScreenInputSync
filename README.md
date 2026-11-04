@@ -107,14 +107,3 @@ rm -rf /Applications/ScreenInputSync.app
 ```
 
 最後可在系統設定中移除它的輔助使用權限。
-
-## 發佈新版本
-
-1. 修改 `ScreenInputSync/Resources/Info.plist` 的 `CFBundleShortVersionString`（顯示版本，如 `1.2`）並把 `CFBundleVersion` 加 1。
-2. 在 `CHANGELOG.md` 最上方新增這個版本的變更。
-3. 用同一張簽署憑證編譯 Release（換憑證會讓使用者的輔助使用權限失效），把 App 壓成 `ScreenInputSync-1.2.zip`。
-4. commit 後建立 Release，標籤為 `v1.2`：
-
-   ```sh
-   gh release create v1.2 ScreenInputSync-1.2.zip --title "ScreenInputSync 1.2" --notes "…"
-   ```
