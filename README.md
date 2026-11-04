@@ -44,7 +44,13 @@ ScreenInputSync 的解法：
 - macOS 14 或更新版本
 - 本機已啟用 ABC 與「繁體中文－注音」
 - 遠端完成下方「遠端 Mac 設定」
-- 編譯需要 **Xcode 16 或更新版本**（專案使用 Swift 6）
+- 自行編譯需要 **Xcode 16 或更新版本**（專案使用 Swift 6）
+
+## 安裝
+
+到 [Releases](https://github.com/Gitgitgitgghub/ScreenInputSync/releases/latest) 下載 `ScreenInputSync-x.y.zip`，解壓縮後把 App 拖進「應用程式」資料夾。Intel 與 Apple 晶片的 Mac 都適用。
+
+App 未經 Apple 公證，第一次打開會被擋下。請到「系統設定 → 隱私權與安全性」，在下方找到 ScreenInputSync 並按「仍要打開」，之後就不會再出現。接著依提示允許「輔助使用」權限（見下方「權限」）。
 
 ## 遠端 Mac 設定
 
