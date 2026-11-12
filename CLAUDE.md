@@ -46,4 +46,4 @@ Keyboard pipeline (all on the main run loop):
 
 - Only the **Accessibility** permission is required (active tap + posting F17); the project deliberately avoids needing Input Monitoring. Check this before adding any new tap type.
 - Ad-hoc signed builds are treated as a new app on each rebuild and lose the Accessibility grant; use a stable Development team when running the real app.
-- Versioning is `major.minor` (`MARKETING_VERSION`), with a `vX.Y` git tag and a CHANGELOG entry (Traditional Chinese) per release. Commit messages use conventional prefixes (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `build:`).
+- Versioning is `major.minor`: `CFBundleShortVersionString` in `ScreenInputSync/Resources/Info.plist`, with `CFBundleVersion` incremented by 1. Each release gets a CHANGELOG entry (Traditional Chinese), a `vX.Y` tag and a GitHub Release with `ScreenInputSync-X.Y.zip`, a universal Release build signed with the same Apple Development certificate as before (a different certificate invalidates users' Accessibility grant). Commit messages use conventional prefixes (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `build:`).

@@ -2,6 +2,11 @@
 
 版本號採用 `主版本.次版本`：新增或改變功能時加次版本，不相容的大改動才加主版本。每個版本在 git 上都有對應的 `v` 標籤（例如 `v1.1`），並發佈在 [Releases](https://github.com/Gitgitgitgghub/ScreenInputSync/releases)。
 
+## [1.2] - 2026-11-12
+
+### 修正
+- 「對齊遠端輸入法」的 `⌘⇧` 只在單獨按下再放開時才會觸發。之前在螢幕共享視窗模式下按 `⌘⇧4` 截圖會誤跳出對齊視窗；中間按了 `⌃`、`⌥`、fn、Caps Lock 或點擊滑鼠的組合鍵，現在也都不會觸發。
+
 ## [1.1] - 2026-11-04
 
 ### 新增
@@ -19,5 +24,6 @@
 - 「對齊遠端輸入法」（`⌘⇧` 或選單）：兩邊不一致時，依遠端選單列按 `E`／`C` 校正本機。
 - 登入時啟動、前往輔助使用權限設定。
 
+[1.2]: https://github.com/Gitgitgitgghub/ScreenInputSync/releases/tag/v1.2
 [1.1]: https://github.com/Gitgitgitgghub/ScreenInputSync/releases/tag/v1.1
 [1.0]: https://github.com/Gitgitgitgghub/ScreenInputSync/releases/tag/v1.0
