@@ -3,6 +3,11 @@ import CoreGraphics
 final class EventTapController: @unchecked Sendable {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
+    /// The system's hardware key-down and click count when Command or Shift
+    /// went down. If it changed by the time the chord completes, another key
+    /// or a click happened in between, including keys that system hotkeys
+    /// (e.g. Command-Shift-4) swallow before this tap can see them.
+    private var chordInputBaseline: UInt32?
     private var router = KeyboardActionRouter()
     private let frontmostChecker: FrontmostApplicationChecking
     private let capsLockState: CapsLockStateResetting
@@ -56,6 +61,12 @@ final class EventTapController: @unchecked Sendable {
         router.setHUDActive(active)
     }
 
+    private static func hardwareInputCount() -> UInt32 {
+        [CGEventType.keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown].reduce(0) {
+            $0 &+ CGEventSource.counterForEventType(.hidSystemState, eventType: $1)
+        }
+    }
+
     private static let callback: CGEventTapCallBack = { _, type, event, userInfo in
         guard let userInfo else { return Unmanaged.passUnretained(event) }
         let controller = Unmanaged<EventTapController>
@@ -90,11 +101,33 @@ final class EventTapController: @unchecked Sendable {
             onDecision(.toggleBoth)
         }
 
+        // Before the guard: Control and Option map to no keyboard event.
+        if type == .flagsChanged,
+           KeyboardEventAdapter.involvesOtherModifier(
+               keyCode: event.getIntegerValueField(.keyboardEventKeycode),
+               flags: event.flags
+           ) {
+            router.interruptChord()
+        }
+
         guard let keyboardEvent else {
             return Unmanaged.passUnretained(event)
         }
 
-        let decision = router.route(keyboardEvent, screenSharingIsFrontmost: screenSharingIsFrontmost)
+        var decision = router.route(keyboardEvent, screenSharingIsFrontmost: screenSharingIsFrontmost)
+        if decision == .showResyncHUD,
+           let baseline = chordInputBaseline,
+           Self.hardwareInputCount() != baseline {
+            router.setHUDActive(false)
+            decision = .passThrough
+        }
+        if type == .flagsChanged {
+            if event.flags.intersection([.maskCommand, .maskShift]).isEmpty {
+                chordInputBaseline = nil
+            } else if chordInputBaseline == nil {
+                chordInputBaseline = Self.hardwareInputCount()
+            }
+        }
         if screenSharingIsFrontmost, decision.suppressesEvent,
            [.capsLockPressed, .capsLockReleased, .lockStateChanged].contains(keyboardEvent) {
             capsLockState.clearCapsLock()
@@ -116,6 +149,17 @@ final class EventTapController: @unchecked Sendable {
 
 enum KeyboardEventAdapter {
     static let heldModifiers: CGEventFlags = [.maskShift, .maskControl, .maskAlternate, .maskCommand]
+    /// Caps Lock, Option, Control (left and right) and fn. Keycode 255
+    /// (synthetic lock-state change) is deliberately not included.
+    static let otherModifierKeyCodes: Set<Int64> = [57, 58, 59, 61, 62, 63]
+    static let otherModifierFlags: CGEventFlags = [.maskControl, .maskAlternate, .maskSecondaryFn]
+
+    /// Whether a flags-changed event involves a modifier other than Command
+    /// and Shift, which turns any Command-Shift chord into a combination
+    /// (e.g. Control-Option-Command-Shift, the "Hyper" key).
+    static func involvesOtherModifier(keyCode: Int64, flags: CGEventFlags) -> Bool {
+        otherModifierKeyCodes.contains(keyCode) || !flags.intersection(otherModifierFlags).isEmpty
+    }
 
     static func map(
         type: CGEventType,

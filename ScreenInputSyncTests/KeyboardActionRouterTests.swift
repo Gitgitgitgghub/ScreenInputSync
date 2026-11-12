@@ -37,6 +37,21 @@ final class KeyboardActionRouterTests: XCTestCase {
         XCTAssertFalse(RoutingDecision.showResyncHUD.suppressesEvent)
     }
 
+    func testInterruptedCommandShiftDoesNotShowHUD() {
+        // E.g. Control tapped while Command-Shift is held.
+        var router = KeyboardActionRouter()
+        XCTAssertEqual(router.route(.commandDown, screenSharingIsFrontmost: true), .passThrough)
+        XCTAssertEqual(router.route(.shiftDown, screenSharingIsFrontmost: true), .passThrough)
+        router.interruptChord()
+        XCTAssertEqual(router.route(.shiftUp, screenSharingIsFrontmost: true), .passThrough)
+        XCTAssertEqual(router.route(.commandUp, screenSharingIsFrontmost: true), .passThrough)
+        // The next bare chord still works.
+        _ = router.route(.commandDown, screenSharingIsFrontmost: true)
+        _ = router.route(.shiftDown, screenSharingIsFrontmost: true)
+        _ = router.route(.commandUp, screenSharingIsFrontmost: true)
+        XCTAssertEqual(router.route(.shiftUp, screenSharingIsFrontmost: true), .showResyncHUD)
+    }
+
     func testShiftFirstChordAlsoShowsHUD() {
         var router = KeyboardActionRouter()
         _ = router.route(.shiftDown, screenSharingIsFrontmost: true)

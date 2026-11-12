@@ -21,4 +21,22 @@ final class KeyboardEventAdapterTests: XCTestCase {
         XCTAssertEqual(KeyboardEventAdapter.map(type: .flagsChanged, keyCode: 255, flags: []), .lockStateChanged)
         XCTAssertEqual(KeyboardEventAdapter.map(type: .flagsChanged, keyCode: 255, flags: [.maskAlphaShift]), .lockStateChanged)
     }
+
+    func testOtherModifiersMakeTheChordACombination() {
+        // Pressing Control, Option, fn or Caps Lock.
+        for keyCode: Int64 in [57, 58, 59, 61, 62, 63] {
+            XCTAssertTrue(KeyboardEventAdapter.involvesOtherModifier(keyCode: keyCode, flags: []), "\(keyCode)")
+        }
+        // Command or Shift pressed while Control, Option or fn is already held.
+        for flags: CGEventFlags in [.maskControl, .maskAlternate, .maskSecondaryFn] {
+            XCTAssertTrue(KeyboardEventAdapter.involvesOtherModifier(keyCode: 55, flags: [.maskCommand, flags]))
+        }
+    }
+
+    func testBareCommandShiftAndLockStateChangesAreNotOtherModifiers() {
+        XCTAssertFalse(KeyboardEventAdapter.involvesOtherModifier(keyCode: 55, flags: [.maskCommand]))
+        XCTAssertFalse(KeyboardEventAdapter.involvesOtherModifier(keyCode: 56, flags: [.maskCommand, .maskShift]))
+        XCTAssertFalse(KeyboardEventAdapter.involvesOtherModifier(keyCode: 60, flags: [.maskShift, .maskAlphaShift]))
+        XCTAssertFalse(KeyboardEventAdapter.involvesOtherModifier(keyCode: 255, flags: [.maskAlphaShift]))
+    }
 }

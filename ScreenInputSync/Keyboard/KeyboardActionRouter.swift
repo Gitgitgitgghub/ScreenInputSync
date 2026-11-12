@@ -51,6 +51,13 @@ struct KeyboardActionRouter {
         if !active { _ = recognizer.handle(.reset) }
     }
 
+    /// Any other input while Command or Shift is held (another modifier, or a
+    /// key or click found through the hardware input count) makes it a key
+    /// combination, never the bare Command-Shift chord.
+    mutating func interruptChord() {
+        _ = recognizer.handle(.otherKeyDown)
+    }
+
     mutating func route(
         _ event: KeyboardEvent,
         screenSharingIsFrontmost: Bool
